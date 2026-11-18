@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, Search, TrendingUp, ListTree, Pencil } from 'lucide-react'
+import { Plus, Search, TrendingUp, ListTree, Pencil, History, PackagePlus } from 'lucide-react'
+import { AjusteStock } from '@/modulos/stock/AjusteStock'
+import { diasHasta, fecha } from '@/lib/formato'
 import { usePerfil } from '@/app/AuthProvider'
 import { puede } from '@/lib/permisos'
 import { pesos, porcentaje, numero } from '@/lib/formato'
@@ -30,7 +32,9 @@ export function Productos() {
   const [estado, setEstado] = useState<Estado>('activos')
   const [soloAvisos, setSoloAvisos] = useState(false)
   const [editando, setEditando] = useState<ProductoVista | 'nuevo' | null>(null)
+  const [ajustando, setAjustando] = useState<ProductoVista | null>(null)
   const [aumento, setAumento] = useState(false)
+  const ajusta = puede(perfil.rol, 'ajustar_stock')
 
   const filtrados = useMemo(() => {
     const q = normalizar(busqueda)
@@ -115,6 +119,13 @@ export function Productos() {
           </div>
           {edita && (
             <div className="flex flex-wrap gap-2 md:ml-auto">
+              {ajusta && (
+                <Link to="/productos/movimientos">
+                  <Boton>
+                    <History size={16} /> Movimientos
+                  </Boton>
+                </Link>
+              )}
               <Link to="/productos/listas">
                 <Boton>
                   <ListTree size={16} /> Categorías, marcas y proveedores
@@ -167,7 +178,7 @@ export function Productos() {
                 </thead>
                 <tbody>
                   {filtrados.map((p) => (
-                    <Fila key={p.id} p={p} veCostos={veCostos} edita={edita} onEditar={() => setEditando(p)} avisar={avisar} />
+                    <Fila key={p.id} p={p} veCostos={veCostos} edita={edita} onEditar={() => setEditando(p)} onAjustar={ajusta ? () => setAjustando(p) : undefined} avisar={avisar} />
                   ))}
                 </tbody>
               </Tabla>
@@ -201,7 +212,8 @@ export function Productos() {
         )}
       </Panel>
 
-      {editando && <FormularioProducto producto={editando === 'nuevo' ? null : editando} onCerrar={() => setEditando(null)} />}
+      {editando && <FormularioProducto producto={editando === 'nuevo' ? null : editando} onCerrar={() => setEditando(null)} onAjustar={ajusta ? (p) => { setEditando(null); setAjustando(p) } : undefined} />}
+      {ajustando && <AjusteStock producto={ajustando} onCerrar={() => setAjustando(null)} />}
       {aumento && <AumentoMasivo onCerrar={() => setAumento(false)} />}
     </>
   )
@@ -212,12 +224,14 @@ function Fila({
   veCostos,
   edita,
   onEditar,
+  onAjustar,
   avisar,
 }: {
   p: ProductoVista
   veCostos: boolean
   edita: boolean
   onEditar: () => void
+  onAjustar?: () => void
   avisar: ReturnType<typeof useAvisar>
 }) {
   const editarProducto = useEditarProducto()
@@ -266,7 +280,12 @@ function Fila({
         </div>
       </td>
       <td className="whitespace-nowrap">{etiquetaUnidad(p.unidad_venta, p.unidades_por_bulto)}</td>
-      <td className="text-right font-semibold">{p.stock_actual}</td>
+      <td className="text-right font-semibold whitespace-nowrap">
+        {p.stock_actual}
+        {p.vence_proximo && (
+          <small className={`block font-normal ${diasHasta(p.vence_proximo) <= 7 ? 'text-mal' : 'text-mudo'}`}>vence {fecha(p.vence_proximo)}</small>
+        )}
+      </td>
       {edita && (
         <td className="text-right">
           <input key={p.stock_minimo} type="number" min={0} defaultValue={p.stock_minimo} className={`${claseNum} w-[64px]`} onBlur={(e) => guardarMinimo(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()} aria-label="Stock mínimo" />
@@ -310,7 +329,12 @@ function Fila({
         </div>
       </td>
       {edita && (
-        <td className="text-right">
+        <td className="text-right whitespace-nowrap">
+          {onAjustar && (
+            <Boton chico variante="fantasma" onClick={onAjustar} aria-label={`Ajustar stock de ${p.nombre}`} title="Ajustar stock">
+              <PackagePlus size={14} /> Stock
+            </Boton>
+          )}{' '}
           <Boton chico onClick={onEditar} aria-label={`Editar ${p.nombre}`}>
             <Pencil size={14} /> Editar
           </Boton>

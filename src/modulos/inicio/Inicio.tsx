@@ -3,6 +3,8 @@ import { Panel, Vacio } from '@/componentes/ui'
 import { fechaLarga, pesos } from '@/lib/formato'
 import { puede } from '@/lib/permisos'
 import { useValorStock } from '@/modulos/productos/api'
+import { PanelStockMinimo } from '@/modulos/stock/PanelStockMinimo'
+import { PanelPorVencer } from '@/modulos/stock/PanelPorVencer'
 
 // Tablero de inicio. En la fase 0 muestra el saludo y los paneles vacíos;
 // cada fase siguiente los va llenando con datos reales.
@@ -32,15 +34,11 @@ export function Inicio() {
       </div>
 
       <div className="grid gap-3 lg:grid-cols-3">
-        <Panel titulo="Stock en el mínimo">
-          <Vacio>Se completa en la fase 2.</Vacio>
-        </Panel>
+        <PanelStockMinimo />
         <Panel titulo="Cuentas por vencer">
           <Vacio>Se completa en la fase 3.</Vacio>
         </Panel>
-        <Panel titulo="Productos por vencer">
-          <Vacio>Se completa en la fase 2.</Vacio>
-        </Panel>
+        {veCostos && <PanelPorVencer />}
       </div>
     </>
   )

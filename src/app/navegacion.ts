@@ -55,6 +55,7 @@ export const GRUPOS: GrupoNav[] = [
 
 export function tituloDeRuta(ruta: string): string {
   if (ruta === '/productos/listas') return 'Categorías, marcas y proveedores'
+  if (ruta === '/productos/movimientos') return 'Movimientos de stock'
   for (const g of GRUPOS) for (const i of g.items) if (i.ruta === ruta) return i.titulo
   return 'El Apache Bebidas'
 }

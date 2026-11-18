@@ -50,6 +50,7 @@ export type ProductoVista = {
   margen_real_pct: number | null
   bajo_costo: boolean | null
   actualizado_en: string
+  vence_proximo: string | null
 }
 
 export type ValorStock = { productos: number; valor_costo: number; en_minimo: number }
@@ -64,4 +65,72 @@ export const NOMBRE_UNIDAD: Record<UnidadVenta, string> = {
 export function etiquetaUnidad(unidad: UnidadVenta, porBulto: number): string {
   if (unidad === 'unidad' || porBulto <= 1) return NOMBRE_UNIDAD[unidad].toLowerCase()
   return `${NOMBRE_UNIDAD[unidad].toLowerCase()} x${porBulto}`
+}
+
+// ---- Stock y compras ----
+
+export type TipoMovimiento = Enums['tipo_movimiento']
+export type MotivoAjuste = Enums['motivo_ajuste']
+export type Compra = Tablas['compras']['Row']
+export type CompraItem = Tablas['compra_items']['Row']
+export type Lote = Tablas['lotes']['Row']
+
+export type CompraVista = {
+  id: string
+  numero: number
+  fecha: string
+  proveedor_id: string | null
+  proveedor: string | null
+  total: number
+  observaciones: string
+  creado_en: string
+  creado_por: string | null
+  usuario: string | null
+  items: number
+  detalle: string | null
+}
+
+export type LotePorVencer = {
+  lote_id: string
+  producto_id: string
+  producto: string
+  unidad_venta: UnidadVenta
+  unidades_por_bulto: number
+  fecha_vencimiento: string
+  cantidad_disponible: number
+  costo_unitario: number
+  dias: number
+}
+
+export type MovimientoVista = {
+  id: number
+  fecha: string
+  producto_id: string
+  producto: string
+  unidad_venta: UnidadVenta
+  unidades_por_bulto: number
+  tipo: TipoMovimiento
+  cantidad: number
+  motivo_ajuste: MotivoAjuste | null
+  nota: string
+  referencia_id: string | null
+  lote_id: string | null
+  lote_vence: string | null
+  usuario_id: string | null
+  usuario: string | null
+}
+
+export const NOMBRE_TIPO_MOVIMIENTO: Record<TipoMovimiento, string> = {
+  carga_inicial: 'Carga inicial',
+  compra: 'Compra',
+  venta: 'Venta',
+  anulacion_venta: 'Anulación de venta',
+  ajuste: 'Ajuste',
+}
+
+export const NOMBRE_MOTIVO_AJUSTE: Record<MotivoAjuste, string> = {
+  rotura: 'Rotura',
+  vencido: 'Vencido',
+  conteo: 'Conteo',
+  otro: 'Otro',
 }

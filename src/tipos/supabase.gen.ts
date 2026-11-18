@@ -77,6 +77,112 @@ export type Database = {
         }
         Relationships: []
       }
+      compra_items: {
+        Row: {
+          cantidad: number
+          compra_id: string
+          costo_unitario: number
+          fecha_vencimiento: string | null
+          id: string
+          producto_id: string
+          subtotal: number | null
+        }
+        Insert: {
+          cantidad: number
+          compra_id: string
+          costo_unitario: number
+          fecha_vencimiento?: string | null
+          id?: string
+          producto_id: string
+          subtotal?: number | null
+        }
+        Update: {
+          cantidad?: number
+          compra_id?: string
+          costo_unitario?: number
+          fecha_vencimiento?: string | null
+          id?: string
+          producto_id?: string
+          subtotal?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compra_items_compra_id_fkey"
+            columns: ["compra_id"]
+            isOneToOne: false
+            referencedRelation: "compras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compra_items_compra_id_fkey"
+            columns: ["compra_id"]
+            isOneToOne: false
+            referencedRelation: "v_compras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compra_items_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compra_items_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "v_productos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compras: {
+        Row: {
+          actualizado_en: string
+          actualizado_por: string | null
+          creado_en: string
+          creado_por: string | null
+          fecha: string
+          id: string
+          numero: number
+          observaciones: string
+          proveedor_id: string | null
+          total: number
+        }
+        Insert: {
+          actualizado_en?: string
+          actualizado_por?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          fecha?: string
+          id?: string
+          numero?: never
+          observaciones?: string
+          proveedor_id?: string | null
+          total?: number
+        }
+        Update: {
+          actualizado_en?: string
+          actualizado_por?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          fecha?: string
+          id?: string
+          numero?: never
+          observaciones?: string
+          proveedor_id?: string | null
+          total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compras_proveedor_id_fkey"
+            columns: ["proveedor_id"]
+            isOneToOne: false
+            referencedRelation: "proveedores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       configuracion: {
         Row: {
           actualizado_en: string
@@ -139,6 +245,64 @@ export type Database = {
           },
         ]
       }
+      lotes: {
+        Row: {
+          cantidad_disponible: number
+          cantidad_inicial: number
+          compra_item_id: string | null
+          costo_unitario: number
+          creado_en: string
+          creado_por: string | null
+          fecha_vencimiento: string | null
+          id: string
+          producto_id: string
+        }
+        Insert: {
+          cantidad_disponible: number
+          cantidad_inicial: number
+          compra_item_id?: string | null
+          costo_unitario: number
+          creado_en?: string
+          creado_por?: string | null
+          fecha_vencimiento?: string | null
+          id?: string
+          producto_id: string
+        }
+        Update: {
+          cantidad_disponible?: number
+          cantidad_inicial?: number
+          compra_item_id?: string | null
+          costo_unitario?: number
+          creado_en?: string
+          creado_por?: string | null
+          fecha_vencimiento?: string | null
+          id?: string
+          producto_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lotes_compra_item_id_fkey"
+            columns: ["compra_item_id"]
+            isOneToOne: false
+            referencedRelation: "compra_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lotes_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lotes_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "v_productos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       marcas: {
         Row: {
           activo: boolean
@@ -168,6 +332,74 @@ export type Database = {
           nombre?: string
         }
         Relationships: []
+      }
+      movimientos_stock: {
+        Row: {
+          cantidad: number
+          fecha: string
+          id: number
+          lote_id: string | null
+          motivo_ajuste: Database["public"]["Enums"]["motivo_ajuste"] | null
+          nota: string
+          producto_id: string
+          referencia_id: string | null
+          tipo: Database["public"]["Enums"]["tipo_movimiento"]
+          usuario_id: string | null
+        }
+        Insert: {
+          cantidad: number
+          fecha?: string
+          id?: never
+          lote_id?: string | null
+          motivo_ajuste?: Database["public"]["Enums"]["motivo_ajuste"] | null
+          nota?: string
+          producto_id: string
+          referencia_id?: string | null
+          tipo: Database["public"]["Enums"]["tipo_movimiento"]
+          usuario_id?: string | null
+        }
+        Update: {
+          cantidad?: number
+          fecha?: string
+          id?: never
+          lote_id?: string | null
+          motivo_ajuste?: Database["public"]["Enums"]["motivo_ajuste"] | null
+          nota?: string
+          producto_id?: string
+          referencia_id?: string | null
+          tipo?: Database["public"]["Enums"]["tipo_movimiento"]
+          usuario_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "movimientos_stock_lote_id_fkey"
+            columns: ["lote_id"]
+            isOneToOne: false
+            referencedRelation: "lotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "movimientos_stock_lote_id_fkey"
+            columns: ["lote_id"]
+            isOneToOne: false
+            referencedRelation: "v_lotes_por_vencer"
+            referencedColumns: ["lote_id"]
+          },
+          {
+            foreignKeyName: "movimientos_stock_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "movimientos_stock_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "v_productos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       perfiles: {
         Row: {
@@ -423,6 +655,109 @@ export type Database = {
         }
         Relationships: []
       }
+      v_compras: {
+        Row: {
+          creado_en: string | null
+          creado_por: string | null
+          detalle: string | null
+          fecha: string | null
+          id: string | null
+          items: number | null
+          numero: number | null
+          observaciones: string | null
+          proveedor: string | null
+          proveedor_id: string | null
+          total: number | null
+          usuario: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compras_proveedor_id_fkey"
+            columns: ["proveedor_id"]
+            isOneToOne: false
+            referencedRelation: "proveedores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_lotes_por_vencer: {
+        Row: {
+          cantidad_disponible: number | null
+          costo_unitario: number | null
+          dias: number | null
+          fecha_vencimiento: string | null
+          lote_id: string | null
+          producto: string | null
+          producto_id: string | null
+          unidad_venta: Database["public"]["Enums"]["unidad_venta"] | null
+          unidades_por_bulto: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lotes_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lotes_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "v_productos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_movimientos_stock: {
+        Row: {
+          cantidad: number | null
+          fecha: string | null
+          id: number | null
+          lote_id: string | null
+          lote_vence: string | null
+          motivo_ajuste: Database["public"]["Enums"]["motivo_ajuste"] | null
+          nota: string | null
+          producto: string | null
+          producto_id: string | null
+          referencia_id: string | null
+          tipo: Database["public"]["Enums"]["tipo_movimiento"] | null
+          unidad_venta: Database["public"]["Enums"]["unidad_venta"] | null
+          unidades_por_bulto: number | null
+          usuario: string | null
+          usuario_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "movimientos_stock_lote_id_fkey"
+            columns: ["lote_id"]
+            isOneToOne: false
+            referencedRelation: "lotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "movimientos_stock_lote_id_fkey"
+            columns: ["lote_id"]
+            isOneToOne: false
+            referencedRelation: "v_lotes_por_vencer"
+            referencedColumns: ["lote_id"]
+          },
+          {
+            foreignKeyName: "movimientos_stock_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "movimientos_stock_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "v_productos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_productos: {
         Row: {
           activo: boolean | null
@@ -448,6 +783,7 @@ export type Database = {
           stock_minimo: number | null
           unidad_venta: Database["public"]["Enums"]["unidad_venta"] | null
           unidades_por_bulto: number | null
+          vence_proximo: string | null
         }
         Relationships: [
           {
@@ -483,6 +819,17 @@ export type Database = {
       }
     }
     Functions: {
+      ajustar_stock: {
+        Args: {
+          p_cantidad: number
+          p_fecha_vencimiento?: string
+          p_lote_id?: string
+          p_motivo: Database["public"]["Enums"]["motivo_ajuste"]
+          p_nota?: string
+          p_producto_id: string
+        }
+        Returns: undefined
+      }
       aumentar_precios: {
         Args: {
           p_categoria_id?: string
@@ -504,20 +851,63 @@ export type Database = {
         }
         Returns: number
       }
+      cargar_stock_inicial: {
+        Args: {
+          p_cantidad: number
+          p_costo_unitario?: number
+          p_fecha_vencimiento?: string
+          p_producto_id: string
+        }
+        Returns: undefined
+      }
+      consumir_stock: {
+        Args: {
+          p_cantidad: number
+          p_lote_id?: string
+          p_motivo?: Database["public"]["Enums"]["motivo_ajuste"]
+          p_nota?: string
+          p_producto_id: string
+          p_referencia_id?: string
+          p_tipo: Database["public"]["Enums"]["tipo_movimiento"]
+        }
+        Returns: undefined
+      }
       es_superusuario: { Args: never; Returns: boolean }
       fecha_ar: { Args: { t: string }; Returns: string }
       guardar_producto: { Args: { p: Json }; Returns: string }
       hoy_ar: { Args: never; Returns: string }
+      ingresar_stock: {
+        Args: {
+          p_cantidad: number
+          p_compra_item_id?: string
+          p_costo_unitario: number
+          p_fecha_vencimiento: string
+          p_motivo?: Database["public"]["Enums"]["motivo_ajuste"]
+          p_nota?: string
+          p_producto_id: string
+          p_referencia_id?: string
+          p_tipo: Database["public"]["Enums"]["tipo_movimiento"]
+        }
+        Returns: string
+      }
       redondear_precio: {
         Args: { redondeo: number; valor: number }
         Returns: number
       }
       redondeo_configurado: { Args: never; Returns: number }
+      registrar_compra: { Args: { p: Json }; Returns: string }
       usuario_activo: { Args: never; Returns: boolean }
       ve_costos: { Args: never; Returns: boolean }
     }
     Enums: {
+      motivo_ajuste: "rotura" | "vencido" | "conteo" | "otro"
       rol_usuario: "superusuario" | "administracion" | "reparto"
+      tipo_movimiento:
+        | "carga_inicial"
+        | "compra"
+        | "venta"
+        | "anulacion_venta"
+        | "ajuste"
       unidad_venta: "unidad" | "pack" | "caja"
     }
     CompositeTypes: {
@@ -646,7 +1036,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      motivo_ajuste: ["rotura", "vencido", "conteo", "otro"],
       rol_usuario: ["superusuario", "administracion", "reparto"],
+      tipo_movimiento: [
+        "carga_inicial",
+        "compra",
+        "venta",
+        "anulacion_venta",
+        "ajuste",
+      ],
       unidad_venta: ["unidad", "pack", "caja"],
     },
   },

@@ -2,16 +2,26 @@ import { useState, type FormEvent } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import { Modal } from '@/componentes/Modal'
-import { Aviso, Boton, Campo, Entrada, Selector, Vacio } from '@/componentes/ui'
+import { Aviso, Boton, Campo, Entrada, Selector, Tabla, Vacio } from '@/componentes/ui'
 import { useAvisar } from '@/componentes/Toast'
-import { pesos, porcentaje, fechaHora, aPesos } from '@/lib/formato'
-import type { ProductoVista, UnidadVenta } from '@/tipos/supabase'
+import { pesos, porcentaje, fecha, fechaHora, aPesos } from '@/lib/formato'
+import { etiquetaUnidad, type ProductoVista, type UnidadVenta } from '@/tipos/supabase'
+import { useLotes, useMovimientos } from '@/modulos/stock/api'
+import { TablaMovimientos } from '@/modulos/stock/Movimientos'
 import { useCategorias, useGuardarProducto, useHistorialPrecios, useMarcas, useProveedores, useGuardarItemLista, mensajeError, type DatosProducto } from './api'
 import { calcularPrecio } from './precios'
 
 type Modo = 'porcentaje' | 'manual'
 
-export function FormularioProducto({ producto, onCerrar }: { producto: ProductoVista | null; onCerrar: () => void }) {
+export function FormularioProducto({
+  producto,
+  onCerrar,
+  onAjustar,
+}: {
+  producto: ProductoVista | null
+  onCerrar: () => void
+  onAjustar?: (p: ProductoVista) => void
+}) {
   const avisar = useAvisar()
   const categorias = useCategorias()
   const marcas = useMarcas()
@@ -45,7 +55,9 @@ export function FormularioProducto({ producto, onCerrar }: { producto: ProductoV
     precio_manual: producto?.precio_manual ?? null,
   })
   const [modo, setModo] = useState<Modo>(producto?.precio_manual != null ? 'manual' : 'porcentaje')
-  const [pestana, setPestana] = useState<'datos' | 'historial'>('datos')
+  const [pestana, setPestana] = useState<'datos' | 'historial' | 'stock'>('datos')
+  const movimientos = useMovimientos(pestana === 'stock' ? (producto?.id ?? null) : null, 50)
+  const lotes = useLotes(pestana === 'stock' ? (producto?.id ?? null) : null)
   const [error, setError] = useState<string | null>(null)
 
   const set = <K extends keyof DatosProducto>(k: K, v: DatosProducto[K]) => setF((prev) => ({ ...prev, [k]: v }))
@@ -103,11 +115,58 @@ export function FormularioProducto({ producto, onCerrar }: { producto: ProductoV
     >
       {producto && (
         <div className="mb-4 flex gap-1 rounded-lg bg-fondo p-1 text-sm">
-          {(['datos', 'historial'] as const).map((t) => (
+          {(['datos', 'stock', 'historial'] as const).map((t) => (
             <button key={t} type="button" onClick={() => setPestana(t)} className={`flex-1 rounded-md px-3 py-1.5 font-medium ${pestana === t ? 'bg-white text-azul shadow-tarjeta' : 'text-tinta-2'}`}>
-              {t === 'datos' ? 'Datos y precio' : 'Historial de precios'}
+              {t === 'datos' ? 'Datos y precio' : t === 'stock' ? 'Stock y lotes' : 'Historial de precios'}
             </button>
           ))}
+        </div>
+      )}
+
+      {pestana === 'stock' && producto && (
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="text-sm text-tinta-2">
+              Stock actual: <b className="font-titulo text-xl text-tinta">{producto.stock_actual}</b> {etiquetaUnidad(producto.unidad_venta, producto.unidades_por_bulto)}
+              {' · '}mínimo {producto.stock_minimo}
+            </div>
+            {onAjustar && <Boton onClick={() => onAjustar(producto)}>Ajustar stock</Boton>}
+          </div>
+          <div>
+            <div className="mb-1.5 text-sm font-semibold">Lotes con stock</div>
+            {lotes.isLoading && <Vacio>Cargando…</Vacio>}
+            {lotes.data?.length === 0 && <Vacio>Sin stock.</Vacio>}
+            {lotes.data && lotes.data.length > 0 && (
+              <Tabla>
+                <thead>
+                  <tr>
+                    <th>Vence</th>
+                    <th className="text-right!">Disponible</th>
+                    <th className="text-right!">Ingresó</th>
+                    <th className="text-right!">Costo</th>
+                    <th>Desde</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lotes.data.map((l) => (
+                    <tr key={l.id}>
+                      <td>{l.fecha_vencimiento ? fecha(l.fecha_vencimiento) : <span className="text-mudo">Sin vencimiento</span>}</td>
+                      <td className="text-right font-semibold">{l.cantidad_disponible}</td>
+                      <td className="text-right text-tinta-2">{l.cantidad_inicial}</td>
+                      <td className="text-right">{pesos(l.costo_unitario)}</td>
+                      <td className="text-tinta-2">{fecha(l.creado_en)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Tabla>
+            )}
+          </div>
+          <div>
+            <div className="mb-1.5 text-sm font-semibold">Últimos movimientos</div>
+            {movimientos.isLoading && <Vacio>Cargando…</Vacio>}
+            {movimientos.data?.length === 0 && <Vacio>Sin movimientos.</Vacio>}
+            {movimientos.data && movimientos.data.length > 0 && <TablaMovimientos movimientos={movimientos.data} />}
+          </div>
         </div>
       )}
 
