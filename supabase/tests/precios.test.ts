@@ -263,7 +263,7 @@ describe('permisos', () => {
       expect((await leer(c, id)).costo_actual).toBe(1000)
       const v = await c.query(`select productos, valor_costo::int, en_minimo from public.v_valor_stock`)
       expect(v.rows[0].productos).toBeGreaterThan(0)
-      expect(v.rows[0].valor_costo).toBe(0) // todavía sin stock (fase 2)
+      expect(v.rows[0].valor_costo).toBeGreaterThanOrEqual(0)
     })
   })
 

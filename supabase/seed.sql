@@ -58,3 +58,38 @@ begin
   end loop;
 end
 $$;
+
+-- Stock inicial de ejemplo (solo si todavía no hay movimientos). Cantidades y
+-- vencimientos parecidos a la demo: algunos en el mínimo y otros por vencer.
+do $$
+declare
+  fila record;
+  v_id uuid;
+  v_costo bigint;
+begin
+  if exists (select 1 from public.movimientos_stock) then
+    return;
+  end if;
+  for fila in
+    select * from (values
+      ('COCA225',  18, 64),
+      ('SPR225',   34, 80),
+      ('FER750',   20, 400),
+      ('QUI1000',  9,  21),
+      ('BRA473',   42, 95),
+      ('AGUA2000', 60, 210),
+      ('TORO1000', 14, 500),
+      ('SPEED250', 6,  12),
+      ('BAG1000',  27, 45),
+      ('GAN950',   11, 380)
+    ) as t(codigo, cantidad, dias)
+  loop
+    select p.id, c.costo_actual into v_id, v_costo
+    from public.productos p join public.producto_costos c on c.producto_id = p.id
+    where p.codigo = fila.codigo;
+    if v_id is not null then
+      perform public.ingresar_stock(v_id, fila.cantidad, v_costo, public.hoy_ar() + fila.dias, 'carga_inicial', null, null, null, 'Carga inicial de ejemplo');
+    end if;
+  end loop;
+end
+$$;
