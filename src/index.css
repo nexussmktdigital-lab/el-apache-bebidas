@@ -1,0 +1,71 @@
+@import 'tailwindcss';
+
+/* Tema de marca de El Apache Bebidas (tomado de la demo aprobada). */
+@theme {
+  --font-sans: 'DM Sans', system-ui, 'Segoe UI', Arial, sans-serif;
+  --font-titulo: 'Outfit', 'DM Sans', system-ui, sans-serif;
+
+  --color-azul: #1f5ac8;
+  --color-azul-oscuro: #103a8b;
+  --color-azul-tinte: #eef3ff;
+  --color-amarillo: #f5b301;
+  --color-amarillo-tinte: #fff6d6;
+  --color-amarillo-texto: #9a6b00;
+
+  --color-fondo: #f5f7fb;
+  --color-borde: #e7eaf0;
+  --color-tinta: #16161d;
+  --color-tinta-2: #4b5565;
+  --color-tinta-3: #667085;
+  --color-mudo: #9aa3b2;
+
+  --color-ok: #1e8e5a;
+  --color-ok-tinte: #e6f5ec;
+  --color-aviso: #b7791f;
+  --color-aviso-tinte: #fff4dc;
+  --color-mal: #c0392b;
+  --color-mal-tinte: #fdecea;
+  --color-whatsapp: #1fa855;
+
+  --radius-tarjeta: 16px;
+  --shadow-tarjeta: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-fondo);
+  color: var(--color-tinta);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-titulo);
+  letter-spacing: -0.01em;
+}
+
+/* Al imprimir solo se ve el área marcada con .imprimible */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .imprimible,
+  .imprimible * {
+    visibility: visible;
+  }
+  .imprimible {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+  }
+}
