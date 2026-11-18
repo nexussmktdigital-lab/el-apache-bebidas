@@ -1,0 +1,12 @@
+// Configuración de deploy en Cloudflare Workers (sitio estático con assets).
+// Workers Builds corre `npm run build` y después `npx wrangler deploy`, que sube la carpeta dist.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "el-apache-bebidas",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  "observability": { "enabled": true }
+}
