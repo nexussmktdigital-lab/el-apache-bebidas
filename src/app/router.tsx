@@ -5,13 +5,14 @@ import { Entrar } from '@/modulos/acceso/Entrar'
 import { Inicio } from '@/modulos/inicio/Inicio'
 import { Usuarios } from '@/modulos/usuarios/Usuarios'
 import { Configuracion } from '@/modulos/configuracion/Configuracion'
-import { Pendiente } from '@/modulos/Pendiente'
 import { Productos } from '@/modulos/productos/Productos'
 import { Listas } from '@/modulos/productos/Listas'
 import { Movimientos } from '@/modulos/stock/Movimientos'
 import { Compras } from '@/modulos/compras/Compras'
 import { Ventas } from '@/modulos/ventas/Ventas'
 import { Clientes } from '@/modulos/clientes/Clientes'
+import { Gastos } from '@/modulos/gastos/Gastos'
+import { Informes } from '@/modulos/informes/Informes'
 import { NoEncontrado } from '@/modulos/NoEncontrado'
 
 export const router = createBrowserRouter([
@@ -29,8 +30,8 @@ export const router = createBrowserRouter([
           { path: '/productos/listas', element: <RutaPorRol pantalla="productos"><RutaPorAccion accion="editar_productos"><Listas /></RutaPorAccion></RutaPorRol> },
           { path: '/productos/movimientos', element: <RutaPorRol pantalla="productos"><RutaPorAccion accion="ajustar_stock"><Movimientos /></RutaPorAccion></RutaPorRol> },
           { path: '/compras', element: <RutaPorRol pantalla="compras"><Compras /></RutaPorRol> },
-          { path: '/gastos', element: <RutaPorRol pantalla="gastos"><Pendiente titulo="Gastos" fase={4} /></RutaPorRol> },
-          { path: '/informes', element: <RutaPorRol pantalla="informes"><Pendiente titulo="Informes" fase={4} /></RutaPorRol> },
+          { path: '/gastos', element: <RutaPorRol pantalla="gastos"><Gastos /></RutaPorRol> },
+          { path: '/informes', element: <RutaPorRol pantalla="informes"><Informes /></RutaPorRol> },
           { path: '/usuarios', element: <RutaPorRol pantalla="usuarios"><Usuarios /></RutaPorRol> },
           { path: '/configuracion', element: <RutaPorRol pantalla="configuracion"><Configuracion /></RutaPorRol> },
           { path: '/inicio', element: <Navigate to="/" replace /> },

@@ -219,3 +219,50 @@ export const NOMBRE_TIPO_CC: Record<TipoCc, string> = {
   anulacion_venta: 'Anulación de venta',
   ajuste: 'Ajuste',
 }
+
+// ---- Gastos e informes ----
+
+export type GastoCategoria = Tablas['gasto_categorias']['Row']
+export type Gasto = Tablas['gastos']['Row']
+
+export type GastoVista = {
+  id: string
+  fecha: string
+  monto: number
+  categoria_id: string | null
+  categoria: string | null
+  medio_pago: FormaPago
+  pagado_a: string
+  detalle: string
+  anulado: boolean
+  anulado_motivo: string | null
+  anulado_en: string | null
+  anulado_por_nombre: string | null
+  creado_en: string
+  creado_por: string | null
+  usuario: string | null
+}
+
+export type BalanceFila = {
+  dia: string
+  ventas_cantidad: number
+  ventas: number
+  costo: number
+  ganancia_bruta: number
+  gastos_cantidad: number
+  gastos: number
+  resultado: number
+}
+
+export type TopProducto = {
+  producto_id: string
+  producto: string
+  unidad: string
+  cantidad: number
+  ventas: number
+  ganancia: number | null
+  stock_actual: number
+  stock_bajo: boolean
+}
+
+export type VentasCategoria = { categoria: string; ventas: number; porcentaje: number }

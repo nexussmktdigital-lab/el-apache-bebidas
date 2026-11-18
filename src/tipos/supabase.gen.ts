@@ -361,6 +361,98 @@ export type Database = {
           },
         ]
       }
+      gasto_categorias: {
+        Row: {
+          activo: boolean
+          actualizado_en: string
+          actualizado_por: string | null
+          creado_en: string
+          creado_por: string | null
+          id: string
+          nombre: string
+        }
+        Insert: {
+          activo?: boolean
+          actualizado_en?: string
+          actualizado_por?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          id?: string
+          nombre: string
+        }
+        Update: {
+          activo?: boolean
+          actualizado_en?: string
+          actualizado_por?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          id?: string
+          nombre?: string
+        }
+        Relationships: []
+      }
+      gastos: {
+        Row: {
+          actualizado_en: string
+          actualizado_por: string | null
+          anulado: boolean
+          anulado_en: string | null
+          anulado_motivo: string | null
+          anulado_por: string | null
+          categoria_id: string | null
+          creado_en: string
+          creado_por: string | null
+          detalle: string
+          fecha: string
+          id: string
+          medio_pago: Database["public"]["Enums"]["forma_pago"]
+          monto: number
+          pagado_a: string
+        }
+        Insert: {
+          actualizado_en?: string
+          actualizado_por?: string | null
+          anulado?: boolean
+          anulado_en?: string | null
+          anulado_motivo?: string | null
+          anulado_por?: string | null
+          categoria_id?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          detalle?: string
+          fecha?: string
+          id?: string
+          medio_pago?: Database["public"]["Enums"]["forma_pago"]
+          monto: number
+          pagado_a?: string
+        }
+        Update: {
+          actualizado_en?: string
+          actualizado_por?: string | null
+          anulado?: boolean
+          anulado_en?: string | null
+          anulado_motivo?: string | null
+          anulado_por?: string | null
+          categoria_id?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          detalle?: string
+          fecha?: string
+          id?: string
+          medio_pago?: Database["public"]["Enums"]["forma_pago"]
+          monto?: number
+          pagado_a?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gastos_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "gasto_categorias"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lotes: {
         Row: {
           cantidad_disponible: number
@@ -1020,6 +1112,34 @@ export type Database = {
           },
         ]
       }
+      v_gastos: {
+        Row: {
+          anulado: boolean | null
+          anulado_en: string | null
+          anulado_motivo: string | null
+          anulado_por_nombre: string | null
+          categoria: string | null
+          categoria_id: string | null
+          creado_en: string | null
+          creado_por: string | null
+          detalle: string | null
+          fecha: string | null
+          id: string | null
+          medio_pago: Database["public"]["Enums"]["forma_pago"] | null
+          monto: number | null
+          pagado_a: string | null
+          usuario: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gastos_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "gasto_categorias"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       v_lotes_por_vencer: {
         Row: {
           cantidad_disponible: number | null
@@ -1247,6 +1367,19 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["rol_usuario"]
       }
+      balance: {
+        Args: { p_desde: string; p_hasta: string }
+        Returns: {
+          costo: number
+          dia: string
+          ganancia_bruta: number
+          gastos: number
+          gastos_cantidad: number
+          resultado: number
+          ventas: number
+          ventas_cantidad: number
+        }[]
+      }
       calcular_precio: {
         Args: {
           costo: number
@@ -1308,6 +1441,19 @@ export type Database = {
         }
         Returns: number
       }
+      productos_mas_vendidos: {
+        Args: { p_desde: string; p_hasta: string; p_limite?: number }
+        Returns: {
+          cantidad: number
+          ganancia: number
+          producto: string
+          producto_id: string
+          stock_actual: number
+          stock_bajo: boolean
+          unidad: string
+          ventas: number
+        }[]
+      }
       redondear_precio: {
         Args: { redondeo: number; valor: number }
         Returns: number
@@ -1326,6 +1472,14 @@ export type Database = {
       usuario_activo: { Args: never; Returns: boolean }
       ve_costos: { Args: never; Returns: boolean }
       ve_ganancias: { Args: never; Returns: boolean }
+      ventas_por_categoria: {
+        Args: { p_desde: string; p_hasta: string }
+        Returns: {
+          categoria: string
+          porcentaje: number
+          ventas: number
+        }[]
+      }
     }
     Enums: {
       estado_venta: "confirmada" | "anulada"

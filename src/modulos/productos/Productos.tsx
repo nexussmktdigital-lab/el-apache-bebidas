@@ -169,7 +169,7 @@ export function Productos() {
                     <th>Unidad</th>
                     <th className="text-right!">Stock</th>
                     {edita && <th className="text-right!">Mínimo</th>}
-                    {veCostos && <th className="text-right!">Costo</th>}
+                    {veCostos && <th className="text-right!">Costo<br /><span className="font-normal normal-case tracking-normal">por bulto · por unidad</span></th>}
                     {veCostos && <th className="text-right!">% ganancia</th>}
                     <th className="text-right!">Precio</th>
                     {veGanancias && <th className="text-right!">Margen</th>}
@@ -300,6 +300,9 @@ function Fila({
             <input key={p.costo_actual} type="text" inputMode="numeric" defaultValue={p.costo_actual ?? 0} className={claseNum} onBlur={(e) => guardarCosto(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLInputElement).blur()} aria-label="Costo" />
           ) : (
             pesos(p.costo_actual)
+          )}
+          {p.costo_actual != null && p.unidades_por_bulto > 1 && (
+            <small className="block text-mudo">{pesos(Math.ceil(p.costo_actual / p.unidades_por_bulto))} c/u</small>
           )}
         </td>
       )}
