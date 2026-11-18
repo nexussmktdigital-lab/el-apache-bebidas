@@ -54,6 +54,18 @@ export async function como<T>(
   }
 }
 
+/** Cambia de usuario dentro de la misma transacción (por ejemplo, Lorena prepara datos y Thiago opera). */
+export async function cambiarUsuario(c: Client, usuario: Usuario | 'servidor'): Promise<void> {
+  await c.query('reset role')
+  if (usuario === 'servidor') {
+    await c.query(`select set_config('request.jwt.claims', '', true)`)
+    return
+  }
+  const claims = JSON.stringify({ sub: USUARIOS[usuario], role: 'authenticated' })
+  await c.query(`select set_config('request.jwt.claims', $1, true)`, [claims])
+  await c.query('set local role authenticated')
+}
+
 /** Igual que `como`, pero conserva los cambios (para preparar datos entre pruebas). */
 export async function comoYGuardar<T>(usuario: Usuario | 'servidor', fn: (c: Client) => Promise<T>): Promise<T> {
   const c = await conectar()
