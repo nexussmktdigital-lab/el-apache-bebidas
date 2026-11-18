@@ -51,14 +51,16 @@ export function Comprobante({ ventaId, onCerrar }: { ventaId: string; onCerrar: 
         <div className="imprimible mx-auto max-w-[560px] bg-white p-2 text-[13px] text-black print:p-6">
           <div className="flex items-start justify-between gap-4 border-b border-black/20 pb-3">
             <div className="flex items-center gap-3">
-              <img src={logo} alt="" className="w-[88px]" />
-              <div>
-                <div className="font-titulo text-lg font-bold leading-tight">{c.nombre_negocio}</div>
-                <div className="text-xs">{c.sucursal}</div>
-                {c.direccion && <div className="text-xs">{c.direccion}</div>}
-                {c.telefono && <div className="text-xs">Tel. {c.telefono}</div>}
-                {c.cuit && <div className="text-xs">CUIT {c.cuit}</div>}
-              </div>
+              <img src={logo} alt={c.nombre_negocio} className={c.comprobante_mostrar_datos ? 'w-[88px]' : 'w-[120px]'} />
+              {c.comprobante_mostrar_datos && (
+                <div>
+                  <div className="font-titulo text-lg font-bold leading-tight">{c.nombre_negocio}</div>
+                  <div className="text-xs">{c.sucursal}</div>
+                  {c.direccion && <div className="text-xs">{c.direccion}</div>}
+                  {c.telefono && <div className="text-xs">Tel. {c.telefono}</div>}
+                  {c.cuit && <div className="text-xs">CUIT {c.cuit}</div>}
+                </div>
+              )}
             </div>
             <div className="text-right">
               <div className="text-xs uppercase tracking-wide">Comprobante</div>

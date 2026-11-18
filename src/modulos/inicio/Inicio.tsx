@@ -16,6 +16,7 @@ import { BotonWhatsApp, EstadoCuentaInsignia } from '@/modulos/clientes/Clientes
 export function Inicio() {
   const perfil = usePerfil()
   const veCostos = puede(perfil.rol, 'ver_costos')
+  const veGanancias = puede(perfil.rol, 'ver_ganancias')
   const valor = useValorStock()
   const hoy = hoyISO()
   const ventasHoy = useVentasPorDia(hoy, hoy)
@@ -33,9 +34,9 @@ export function Inicio() {
         Hola, {perfil.nombre.split(' ')[0]}. Este es el resumen de hoy, {fechaLarga()}.
       </p>
 
-      <div className={`mb-3 grid gap-3 ${veCostos ? 'grid-cols-2 xl:grid-cols-4' : 'grid-cols-2'}`}>
+      <div className={`mb-3 grid gap-3 ${veCostos && veGanancias ? 'grid-cols-2 xl:grid-cols-4' : veCostos ? 'grid-cols-2 xl:grid-cols-3' : 'grid-cols-2'}`}>
         <Indicador etiqueta="Ventas de hoy" valor={ventasHoy.data ? pesos(h?.ventas ?? 0) : '—'} detalle={`${h?.cantidad ?? 0} ${h?.cantidad === 1 ? 'venta cargada' : 'ventas cargadas'} hasta ahora`} icono={Receipt} />
-        {veCostos && (
+        {veGanancias && (
           <Indicador etiqueta="Ganancia de hoy" valor={ventasHoy.data ? pesos(h?.ganancia ?? 0) : '—'} detalle={margen != null ? `${margen} % de margen` : 'sin ventas todavía'} icono={BarChart3} />
         )}
         {veCostos && (

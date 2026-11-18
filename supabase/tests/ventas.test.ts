@@ -78,12 +78,16 @@ describe('confirmar venta', () => {
     })
   })
 
-  it('quien ve costos ve el costo y la ganancia de la venta, y los movimientos quedaron con la venta como referencia', async () => {
+  it('el superusuario ve el costo y la ganancia de la venta; administración no; los movimientos quedaron con la venta como referencia', async () => {
     await como('lorena', async (c) => {
       const p = await producto(c, 'Con costo', 10000, 50, 5) // precio 15000
       const id = await vender(c, [{ producto_id: p, cantidad: 3 }])
-      const v = await venta(c, id)
+      let v = await venta(c, id)
       expect(v.total).toBe(45000)
+      expect(v.costo_total).toBeNull() // administración no ve ganancias
+      expect(v.ganancia).toBeNull()
+      await cambiarUsuario(c, 'lorenzo')
+      v = await venta(c, id)
       expect(v.costo_total).toBe(30000)
       expect(v.ganancia).toBe(15000)
       const movs = await c.query(`select tipo, cantidad from public.v_movimientos_stock where referencia_id = $1`, [id])
@@ -96,6 +100,7 @@ describe('confirmar venta', () => {
       const p = await producto(c, 'Congelado', 1000, 20, 5) // 1200
       const id = await vender(c, [{ producto_id: p, cantidad: 1 }])
       await c.query(`update public.producto_costos set costo_actual = 5000, precio_manual = 9000 where producto_id = $1`, [p])
+      await cambiarUsuario(c, 'lorenzo')
       const v = await venta(c, id)
       expect(v.total).toBe(1200)
       expect(v.costo_total).toBe(1000)
@@ -156,15 +161,15 @@ describe('cuenta corriente', () => {
 
       const id = await vender(c, [{ producto_id: p, cantidad: 3 }], 'cuenta_corriente', clienteId)
       const v = await venta(c, id)
-      const en15 = (await c.query(`select (public.hoy_ar() + 15)::text as d`)).rows[0].d
+      const en7 = (await c.query(`select (public.hoy_ar() + 7)::text as d`)).rows[0].d
       expect(v.cliente).toBe('Kiosco El Trébol')
-      expect(v.vence_el).toBe(en15)
+      expect(v.vence_el).toBe(en7)
 
       const cl = await cliente(c, clienteId)
-      expect(cl).toEqual({ nombre: 'Kiosco El Trébol', saldo: 3600, vence_el: en15, dias: 15, estado: 'al_dia' })
+      expect(cl).toEqual({ nombre: 'Kiosco El Trébol', saldo: 3600, vence_el: en7, dias: 7, estado: 'al_dia' })
 
       const mov = await c.query(`select tipo, importe::int, venta_numero, vence_el::text, usuario from public.v_cc_movimientos where cliente_id = $1`, [clienteId])
-      expect(mov.rows).toEqual([{ tipo: 'venta', importe: 3600, venta_numero: v.numero, vence_el: en15, usuario: 'Thiago' }])
+      expect(mov.rows).toEqual([{ tipo: 'venta', importe: 3600, venta_numero: v.numero, vence_el: en7, usuario: 'Thiago' }])
     })
   })
 
@@ -209,10 +214,10 @@ describe('cuenta corriente', () => {
   it('estado por vencer y vencida según el plazo de aviso', async () => {
     await como('lorena', async (c) => {
       const cl = (await c.query(`insert into public.clientes (nombre) values ('Moroso') returning id`)).rows[0].id
-      await c.query(`select public.ajustar_cc($1, 20000, 'Saldo del sistema viejo', (public.hoy_ar() + 5)::date, true)`, [cl])
-      expect((await cliente(c, cl)).estado).toBe('por_vencer') // vence en 5 días, aviso 7
+      await c.query(`select public.ajustar_cc($1, 20000, 'Saldo del sistema viejo', (public.hoy_ar() + 1)::date, true)`, [cl])
+      expect((await cliente(c, cl)).estado).toBe('por_vencer') // vence mañana, aviso 1 día antes
       await cambiarUsuario(c, 'lorenzo')
-      await c.query(`update public.configuracion set aviso_cc_dias = 2`)
+      await c.query(`update public.configuracion set aviso_cc_dias = 0`)
       expect((await cliente(c, cl)).estado).toBe('al_dia')
       const cl2 = (await c.query(`insert into public.clientes (nombre) values ('Vencido') returning id`)).rows[0].id
       await c.query(`select public.ajustar_cc($1, 500, 'Deuda vieja', (public.hoy_ar() - 10)::date, true)`, [cl2])

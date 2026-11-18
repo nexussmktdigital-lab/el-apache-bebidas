@@ -16,6 +16,7 @@ export type Pantalla =
 
 export type Accion =
   | 'ver_costos'
+  | 'ver_ganancias'
   | 'editar_productos'
   | 'editar_precios'
   | 'ajustar_stock'
@@ -39,6 +40,7 @@ const PANTALLAS: Record<RolUsuario, Pantalla[]> = {
 const ACCIONES: Record<RolUsuario, Accion[]> = {
   superusuario: [
     'ver_costos',
+    'ver_ganancias',
     'editar_productos',
     'editar_precios',
     'ajustar_stock',
@@ -79,11 +81,11 @@ export function puede(rol: RolUsuario | null | undefined, accion: Accion): boole
 export const NOMBRE_ROL: Record<RolUsuario, string> = {
   superusuario: 'Superusuario',
   administracion: 'Administración',
-  reparto: 'Reparto',
+  reparto: 'Ventas y cobros',
 }
 
 export const DESCRIPCION_ROL: Record<RolUsuario, string> = {
-  superusuario: 'Ve y hace todo, incluidos informes, usuarios y configuración.',
-  administracion: 'Productos, compras, ventas, cuentas corrientes y gastos. Ve costos y ganancias.',
-  reparto: 'Ventas y cuentas corrientes. No ve costos ni ganancias.',
+  superusuario: 'Ve y hace todo, incluidos ganancias, informes, usuarios y configuración.',
+  administracion: 'Productos, compras, ventas, cuentas corrientes y gastos. Ve costos y cambia precios, pero no ve ganancias.',
+  reparto: 'Solo vende y cobra. No ve costos, no cambia precios.',
 }

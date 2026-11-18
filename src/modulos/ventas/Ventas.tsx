@@ -24,7 +24,7 @@ function restarDias(iso: string, n: number): string {
 
 export function Ventas() {
   const perfil = usePerfil()
-  const veCostos = puede(perfil.rol, 'ver_costos')
+  const veCostos = puede(perfil.rol, 'ver_ganancias')
   const anula = puede(perfil.rol, 'anular_ventas')
   const avisar = useAvisar()
 

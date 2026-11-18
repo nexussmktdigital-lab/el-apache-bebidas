@@ -19,6 +19,7 @@ export function Productos() {
   const perfil = usePerfil()
   const veCostos = puede(perfil.rol, 'ver_costos')
   const edita = puede(perfil.rol, 'editar_productos')
+  const veGanancias = puede(perfil.rol, 'ver_ganancias')
   const avisar = useAvisar()
 
   const productos = useProductos()
@@ -171,14 +172,14 @@ export function Productos() {
                     {veCostos && <th className="text-right!">Costo</th>}
                     {veCostos && <th className="text-right!">% ganancia</th>}
                     <th className="text-right!">Precio</th>
-                    {veCostos && <th className="text-right!">Margen</th>}
+                    {veGanancias && <th className="text-right!">Margen</th>}
                     <th>Estado</th>
                     {edita && <th></th>}
                   </tr>
                 </thead>
                 <tbody>
                   {filtrados.map((p) => (
-                    <Fila key={p.id} p={p} veCostos={veCostos} edita={edita} onEditar={() => setEditando(p)} onAjustar={ajusta ? () => setAjustando(p) : undefined} avisar={avisar} />
+                    <Fila key={p.id} p={p} veCostos={veCostos} veGanancias={veGanancias} edita={edita} onEditar={() => setEditando(p)} onAjustar={ajusta ? () => setAjustando(p) : undefined} avisar={avisar} />
                   ))}
                 </tbody>
               </Tabla>
@@ -222,6 +223,7 @@ export function Productos() {
 function Fila({
   p,
   veCostos,
+  veGanancias,
   edita,
   onEditar,
   onAjustar,
@@ -229,6 +231,7 @@ function Fila({
 }: {
   p: ProductoVista
   veCostos: boolean
+  veGanancias: boolean
   edita: boolean
   onEditar: () => void
   onAjustar?: () => void
@@ -316,7 +319,7 @@ function Fila({
           <b>{pesos(p.precio_venta)}</b>
         )}
       </td>
-      {veCostos && (
+      {veGanancias && (
         <td className="text-right whitespace-nowrap">
           {pesos(p.margen_pesos)}
           <br />

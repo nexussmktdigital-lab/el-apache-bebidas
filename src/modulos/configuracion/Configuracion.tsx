@@ -55,6 +55,10 @@ export function Configuracion() {
       <p className="mb-4 text-tinta-2">Datos del negocio y reglas que el sistema usa en comprobantes, avisos y precios.</p>
 
       <Panel titulo="Datos del comprobante">
+        <label className="mb-3 flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={f.comprobante_mostrar_datos} onChange={(e) => set('comprobante_mostrar_datos', e.target.checked)} className="h-4 w-4 accent-azul" />
+          Mostrar nombre, dirección, teléfono y CUIT arriba del comprobante (si está apagado, va solo el logo)
+        </label>
         <div className="grid gap-3 md:grid-cols-2">
           <Campo etiqueta="Nombre del negocio">
             <Entrada value={f.nombre_negocio} onChange={(e) => set('nombre_negocio', e.target.value)} required />

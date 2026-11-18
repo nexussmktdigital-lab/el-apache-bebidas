@@ -84,7 +84,7 @@ describe('configuración', () => {
   it('todos los activos la leen; solo el superusuario la cambia', async () => {
     await como('thiago', async (c) => {
       const r = await c.query(`select plazo_cc_dias, redondeo_precio from public.configuracion`)
-      expect(r.rows[0]).toEqual({ plazo_cc_dias: 15, redondeo_precio: 10 })
+      expect(r.rows[0]).toEqual({ plazo_cc_dias: 7, redondeo_precio: 10 })
       const upd = await c.query(`update public.configuracion set plazo_cc_dias = 30`)
       expect(upd.rowCount).toBe(0)
     })

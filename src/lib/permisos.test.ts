@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { puede, puedeVer } from './permisos'
 
 describe('permisos por rol', () => {
-  it('Thiago (reparto) vende y cobra, pero no ve costos ni informes', () => {
+  it('Ventas y cobros (Patricia) vende y cobra, pero no ve costos ni informes', () => {
     expect(puede('reparto', 'vender')).toBe(true)
     expect(puede('reparto', 'registrar_pagos')).toBe(true)
     expect(puede('reparto', 'ver_costos')).toBe(false)
@@ -12,8 +12,9 @@ describe('permisos por rol', () => {
     expect(puedeVer('reparto', 'gastos')).toBe(false)
   })
 
-  it('Lorena (administración) ve costos pero no informes ni usuarios', () => {
+  it('Administración (Thiago) ve costos pero no ganancias, informes ni usuarios', () => {
     expect(puede('administracion', 'ver_costos')).toBe(true)
+    expect(puede('administracion', 'ver_ganancias')).toBe(false)
     expect(puede('administracion', 'anular_ventas')).toBe(true)
     expect(puede('administracion', 'anular_ventas_antiguas')).toBe(false)
     expect(puedeVer('administracion', 'informes')).toBe(false)
@@ -22,6 +23,7 @@ describe('permisos por rol', () => {
 
   it('Lorenzo (superusuario) puede todo', () => {
     expect(puedeVer('superusuario', 'usuarios')).toBe(true)
+    expect(puede('superusuario', 'ver_ganancias')).toBe(true)
     expect(puede('superusuario', 'importar_datos')).toBe(true)
   })
 

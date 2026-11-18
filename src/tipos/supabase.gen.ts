@@ -302,6 +302,7 @@ export type Database = {
           actualizado_por: string | null
           aviso_cc_dias: number
           aviso_vencimiento_dias: number
+          comprobante_mostrar_datos: boolean
           cuit: string
           direccion: string
           id: boolean
@@ -319,6 +320,7 @@ export type Database = {
           actualizado_por?: string | null
           aviso_cc_dias?: number
           aviso_vencimiento_dias?: number
+          comprobante_mostrar_datos?: boolean
           cuit?: string
           direccion?: string
           id?: boolean
@@ -336,6 +338,7 @@ export type Database = {
           actualizado_por?: string | null
           aviso_cc_dias?: number
           aviso_vencimiento_dias?: number
+          comprobante_mostrar_datos?: boolean
           cuit?: string
           direccion?: string
           id?: boolean
@@ -1322,6 +1325,7 @@ export type Database = {
       }
       usuario_activo: { Args: never; Returns: boolean }
       ve_costos: { Args: never; Returns: boolean }
+      ve_ganancias: { Args: never; Returns: boolean }
     }
     Enums: {
       estado_venta: "confirmada" | "anulada"
