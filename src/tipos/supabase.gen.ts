@@ -1415,6 +1415,13 @@ export type Database = {
       fecha_ar: { Args: { t: string }; Returns: string }
       guardar_producto: { Args: { p: Json }; Returns: string }
       hoy_ar: { Args: never; Returns: string }
+      importar_buscar_o_crear: {
+        Args: { p_nombre: string; p_tabla: string }
+        Returns: string
+      }
+      importar_clientes: { Args: { p: Json }; Returns: Json }
+      importar_productos: { Args: { p: Json }; Returns: Json }
+      importar_proveedores: { Args: { p: Json }; Returns: Json }
       ingresar_stock: {
         Args: {
           p_cantidad: number
