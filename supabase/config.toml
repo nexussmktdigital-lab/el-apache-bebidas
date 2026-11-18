@@ -23,8 +23,8 @@ sql_paths = ["./seed.sql"]
 
 [auth]
 enabled = true
-site_url = "http://localhost:5173"
-additional_redirect_urls = ["http://localhost:5173"]
+site_url = "https://el-apache-bebidas.nexuss-mktdigital.workers.dev"
+additional_redirect_urls = ["http://localhost:5173", "https://el-apache-bebidas.nexuss-mktdigital.workers.dev"]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
 # Sin registro abierto: los usuarios los crea NEXUSS.
