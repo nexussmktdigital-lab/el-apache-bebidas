@@ -20,3 +20,7 @@ Thumbs.db
 
 # salida de tsc
 *.tsbuildinfo
+
+# credenciales locales (usuarios de prueba, etc.)
+*.local.txt
+*.local.md

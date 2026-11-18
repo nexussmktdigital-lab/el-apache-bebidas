@@ -1,0 +1,5 @@
+[
+  { "email": "lorenzo@pruebas.local", "nombre": "Lorenzo", "rol": "superusuario" },
+  { "email": "lorena@pruebas.local", "nombre": "Lorena", "rol": "administracion" },
+  { "email": "thiago@pruebas.local", "nombre": "Thiago", "rol": "reparto" }
+]
