@@ -10,6 +10,8 @@ import { Productos } from '@/modulos/productos/Productos'
 import { Listas } from '@/modulos/productos/Listas'
 import { Movimientos } from '@/modulos/stock/Movimientos'
 import { Compras } from '@/modulos/compras/Compras'
+import { Ventas } from '@/modulos/ventas/Ventas'
+import { Clientes } from '@/modulos/clientes/Clientes'
 import { NoEncontrado } from '@/modulos/NoEncontrado'
 
 export const router = createBrowserRouter([
@@ -21,8 +23,8 @@ export const router = createBrowserRouter([
         element: <Layout />,
         children: [
           { path: '/', element: <Inicio /> },
-          { path: '/ventas', element: <RutaPorRol pantalla="ventas"><Pendiente titulo="Ventas y repartos" fase={3} /></RutaPorRol> },
-          { path: '/clientes', element: <RutaPorRol pantalla="clientes"><Pendiente titulo="Cuentas corrientes" fase={3} /></RutaPorRol> },
+          { path: '/ventas', element: <RutaPorRol pantalla="ventas"><Ventas /></RutaPorRol> },
+          { path: '/clientes', element: <RutaPorRol pantalla="clientes"><Clientes /></RutaPorRol> },
           { path: '/productos', element: <RutaPorRol pantalla="productos"><Productos /></RutaPorRol> },
           { path: '/productos/listas', element: <RutaPorRol pantalla="productos"><RutaPorAccion accion="editar_productos"><Listas /></RutaPorAccion></RutaPorRol> },
           { path: '/productos/movimientos', element: <RutaPorRol pantalla="productos"><RutaPorAccion accion="ajustar_stock"><Movimientos /></RutaPorAccion></RutaPorRol> },

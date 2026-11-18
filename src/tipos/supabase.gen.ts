@@ -77,6 +77,119 @@ export type Database = {
         }
         Relationships: []
       }
+      cc_movimientos: {
+        Row: {
+          cliente_id: string
+          fecha: string
+          id: number
+          importe: number
+          medio_pago: Database["public"]["Enums"]["forma_pago"] | null
+          nota: string
+          tipo: Database["public"]["Enums"]["tipo_cc"]
+          usuario_id: string | null
+          vence_el: string | null
+          venta_id: string | null
+        }
+        Insert: {
+          cliente_id: string
+          fecha?: string
+          id?: never
+          importe: number
+          medio_pago?: Database["public"]["Enums"]["forma_pago"] | null
+          nota?: string
+          tipo: Database["public"]["Enums"]["tipo_cc"]
+          usuario_id?: string | null
+          vence_el?: string | null
+          venta_id?: string | null
+        }
+        Update: {
+          cliente_id?: string
+          fecha?: string
+          id?: never
+          importe?: number
+          medio_pago?: Database["public"]["Enums"]["forma_pago"] | null
+          nota?: string
+          tipo?: Database["public"]["Enums"]["tipo_cc"]
+          usuario_id?: string | null
+          vence_el?: string | null
+          venta_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cc_movimientos_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cc_movimientos_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "v_clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cc_movimientos_venta_id_fkey"
+            columns: ["venta_id"]
+            isOneToOne: false
+            referencedRelation: "v_ventas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cc_movimientos_venta_id_fkey"
+            columns: ["venta_id"]
+            isOneToOne: false
+            referencedRelation: "ventas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clientes: {
+        Row: {
+          activo: boolean
+          actualizado_en: string
+          actualizado_por: string | null
+          creado_en: string
+          creado_por: string | null
+          cuit: string
+          direccion: string
+          id: string
+          nombre: string
+          notas: string
+          telefono: string
+          zona: string
+        }
+        Insert: {
+          activo?: boolean
+          actualizado_en?: string
+          actualizado_por?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          cuit?: string
+          direccion?: string
+          id?: string
+          nombre: string
+          notas?: string
+          telefono?: string
+          zona?: string
+        }
+        Update: {
+          activo?: boolean
+          actualizado_en?: string
+          actualizado_por?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          cuit?: string
+          direccion?: string
+          id?: string
+          nombre?: string
+          notas?: string
+          telefono?: string
+          zona?: string
+        }
+        Relationships: []
+      }
       compra_items: {
         Row: {
           cantidad: number
@@ -639,6 +752,163 @@ export type Database = {
         }
         Relationships: []
       }
+      venta_item_costos: {
+        Row: {
+          costo_unitario: number
+          venta_item_id: string
+        }
+        Insert: {
+          costo_unitario: number
+          venta_item_id: string
+        }
+        Update: {
+          costo_unitario?: number
+          venta_item_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venta_item_costos_venta_item_id_fkey"
+            columns: ["venta_item_id"]
+            isOneToOne: true
+            referencedRelation: "venta_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      venta_items: {
+        Row: {
+          cantidad: number
+          descripcion: string
+          id: string
+          precio_unitario: number
+          producto_id: string
+          subtotal: number | null
+          unidad: string
+          venta_id: string
+        }
+        Insert: {
+          cantidad: number
+          descripcion: string
+          id?: string
+          precio_unitario: number
+          producto_id: string
+          subtotal?: number | null
+          unidad?: string
+          venta_id: string
+        }
+        Update: {
+          cantidad?: number
+          descripcion?: string
+          id?: string
+          precio_unitario?: number
+          producto_id?: string
+          subtotal?: number | null
+          unidad?: string
+          venta_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venta_items_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "productos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venta_items_producto_id_fkey"
+            columns: ["producto_id"]
+            isOneToOne: false
+            referencedRelation: "v_productos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venta_items_venta_id_fkey"
+            columns: ["venta_id"]
+            isOneToOne: false
+            referencedRelation: "v_ventas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venta_items_venta_id_fkey"
+            columns: ["venta_id"]
+            isOneToOne: false
+            referencedRelation: "ventas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ventas: {
+        Row: {
+          actualizado_en: string
+          actualizado_por: string | null
+          anulada_en: string | null
+          anulada_por: string | null
+          cliente_id: string | null
+          creado_en: string
+          creado_por: string | null
+          estado: Database["public"]["Enums"]["estado_venta"]
+          fecha: string
+          forma_pago: Database["public"]["Enums"]["forma_pago"]
+          id: string
+          motivo_anulacion: string | null
+          nota: string
+          numero: number
+          total: number
+          vence_el: string | null
+        }
+        Insert: {
+          actualizado_en?: string
+          actualizado_por?: string | null
+          anulada_en?: string | null
+          anulada_por?: string | null
+          cliente_id?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          estado?: Database["public"]["Enums"]["estado_venta"]
+          fecha?: string
+          forma_pago: Database["public"]["Enums"]["forma_pago"]
+          id?: string
+          motivo_anulacion?: string | null
+          nota?: string
+          numero?: never
+          total?: number
+          vence_el?: string | null
+        }
+        Update: {
+          actualizado_en?: string
+          actualizado_por?: string | null
+          anulada_en?: string | null
+          anulada_por?: string | null
+          cliente_id?: string | null
+          creado_en?: string
+          creado_por?: string | null
+          estado?: Database["public"]["Enums"]["estado_venta"]
+          fecha?: string
+          forma_pago?: Database["public"]["Enums"]["forma_pago"]
+          id?: string
+          motivo_anulacion?: string | null
+          nota?: string
+          numero?: never
+          total?: number
+          vence_el?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ventas_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ventas_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "v_clientes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       v_auditoria: {
@@ -652,6 +922,73 @@ export type Database = {
           tabla: string | null
           usuario: string | null
           usuario_id: string | null
+        }
+        Relationships: []
+      }
+      v_cc_movimientos: {
+        Row: {
+          cliente_id: string | null
+          fecha: string | null
+          id: number | null
+          importe: number | null
+          medio_pago: Database["public"]["Enums"]["forma_pago"] | null
+          nota: string | null
+          saldo_acumulado: number | null
+          tipo: Database["public"]["Enums"]["tipo_cc"] | null
+          usuario: string | null
+          usuario_id: string | null
+          vence_el: string | null
+          venta_id: string | null
+          venta_numero: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cc_movimientos_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cc_movimientos_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "v_clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cc_movimientos_venta_id_fkey"
+            columns: ["venta_id"]
+            isOneToOne: false
+            referencedRelation: "v_ventas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cc_movimientos_venta_id_fkey"
+            columns: ["venta_id"]
+            isOneToOne: false
+            referencedRelation: "ventas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_clientes: {
+        Row: {
+          activo: boolean | null
+          actualizado_en: string | null
+          creado_en: string | null
+          cuit: string | null
+          dias: number | null
+          direccion: string | null
+          estado: string | null
+          id: string | null
+          nombre: string | null
+          notas: string | null
+          saldo: number | null
+          telefono: string | null
+          ultimo_pago: string | null
+          vence_el: string | null
+          zona: string | null
         }
         Relationships: []
       }
@@ -817,8 +1154,69 @@ export type Database = {
         }
         Relationships: []
       }
+      v_ventas: {
+        Row: {
+          anulada_en: string | null
+          anulada_por: string | null
+          anulada_por_nombre: string | null
+          cliente: string | null
+          cliente_id: string | null
+          costo_total: number | null
+          creado_por: string | null
+          detalle: string | null
+          dia: string | null
+          estado: Database["public"]["Enums"]["estado_venta"] | null
+          fecha: string | null
+          forma_pago: Database["public"]["Enums"]["forma_pago"] | null
+          ganancia: number | null
+          id: string | null
+          items: number | null
+          motivo_anulacion: string | null
+          nota: string | null
+          numero: number | null
+          total: number | null
+          usuario: string | null
+          vence_el: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ventas_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ventas_cliente_id_fkey"
+            columns: ["cliente_id"]
+            isOneToOne: false
+            referencedRelation: "v_clientes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_ventas_por_dia: {
+        Row: {
+          cantidad: number | null
+          costo: number | null
+          dia: string | null
+          ganancia: number | null
+          ventas: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      ajustar_cc: {
+        Args: {
+          p_cliente_id: string
+          p_importe: number
+          p_nota: string
+          p_saldo_inicial?: boolean
+          p_vence_el?: string
+        }
+        Returns: number
+      }
       ajustar_stock: {
         Args: {
           p_cantidad: number
@@ -828,6 +1226,10 @@ export type Database = {
           p_nota?: string
           p_producto_id: string
         }
+        Returns: undefined
+      }
+      anular_venta: {
+        Args: { p_motivo: string; p_venta_id: string }
         Returns: undefined
       }
       aumentar_precios: {
@@ -860,6 +1262,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      confirmar_venta: { Args: { p: Json }; Returns: string }
       consumir_stock: {
         Args: {
           p_cantidad: number
@@ -890,18 +1293,42 @@ export type Database = {
         }
         Returns: string
       }
+      mover_cc: {
+        Args: {
+          p_cliente_id: string
+          p_importe: number
+          p_medio_pago?: Database["public"]["Enums"]["forma_pago"]
+          p_nota?: string
+          p_tipo: Database["public"]["Enums"]["tipo_cc"]
+          p_vence_el?: string
+          p_venta_id?: string
+        }
+        Returns: number
+      }
       redondear_precio: {
         Args: { redondeo: number; valor: number }
         Returns: number
       }
       redondeo_configurado: { Args: never; Returns: number }
       registrar_compra: { Args: { p: Json }; Returns: string }
+      registrar_pago: {
+        Args: {
+          p_cliente_id: string
+          p_importe: number
+          p_medio: Database["public"]["Enums"]["forma_pago"]
+          p_nota?: string
+        }
+        Returns: number
+      }
       usuario_activo: { Args: never; Returns: boolean }
       ve_costos: { Args: never; Returns: boolean }
     }
     Enums: {
+      estado_venta: "confirmada" | "anulada"
+      forma_pago: "efectivo" | "transferencia" | "cuenta_corriente"
       motivo_ajuste: "rotura" | "vencido" | "conteo" | "otro"
       rol_usuario: "superusuario" | "administracion" | "reparto"
+      tipo_cc: "saldo_inicial" | "venta" | "pago" | "anulacion_venta" | "ajuste"
       tipo_movimiento:
         | "carga_inicial"
         | "compra"
@@ -1036,8 +1463,11 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      estado_venta: ["confirmada", "anulada"],
+      forma_pago: ["efectivo", "transferencia", "cuenta_corriente"],
       motivo_ajuste: ["rotura", "vencido", "conteo", "otro"],
       rol_usuario: ["superusuario", "administracion", "reparto"],
+      tipo_cc: ["saldo_inicial", "venta", "pago", "anulacion_venta", "ajuste"],
       tipo_movimiento: [
         "carga_inicial",
         "compra",
