@@ -133,17 +133,31 @@ export function Usuarios() {
 const NOMBRE_TABLA: Record<string, string> = {
   perfiles: 'un usuario',
   configuracion: 'la configuración',
+  categorias: 'una categoría',
+  marcas: 'una marca',
+  proveedores: 'un proveedor',
 }
 
+type Registro = Record<string, unknown>
+
 function describir(m: Auditoria): string {
-  const que = NOMBRE_TABLA[m.tabla] ?? m.tabla
-  if (m.tabla === 'perfiles' && m.accion === 'update' && m.antes && m.despues) {
-    const nombre = String(m.despues.nombre ?? '')
-    if (m.antes.rol !== m.despues.rol) return `cambió el rol de ${nombre} a ${NOMBRE_ROL[m.despues.rol as RolUsuario] ?? m.despues.rol}`
-    if (m.antes.activo !== m.despues.activo) return m.despues.activo ? `reactivó a ${nombre}` : `desactivó a ${nombre}`
-    if (m.antes.nombre !== m.despues.nombre) return `cambió el nombre de ${m.antes.nombre} a ${nombre}`
+  const tabla = m.tabla ?? ''
+  const que = NOMBRE_TABLA[tabla] ?? tabla
+  const antes = (m.antes ?? null) as Registro | null
+  const despues = (m.despues ?? null) as Registro | null
+  if (tabla === 'perfiles' && m.accion === 'update' && antes && despues) {
+    const nombre = String(despues.nombre ?? '')
+    if (antes.rol !== despues.rol) return `cambió el rol de ${nombre} a ${NOMBRE_ROL[despues.rol as RolUsuario] ?? String(despues.rol)}`
+    if (antes.activo !== despues.activo) return despues.activo ? `reactivó a ${nombre}` : `desactivó a ${nombre}`
+    if (antes.nombre !== despues.nombre) return `cambió el nombre de ${String(antes.nombre)} a ${nombre}`
   }
-  if (m.tabla === 'perfiles' && m.accion === 'insert') return `dio de alta a ${String(m.despues?.nombre ?? '')}`
+  if (tabla === 'perfiles' && m.accion === 'insert') return `dio de alta a ${String(despues?.nombre ?? '')}`
+  if (tabla === 'productos' && despues) {
+    const nombre = String(despues.nombre ?? '')
+    if (m.accion === 'insert') return `cargó el producto ${nombre}`
+    if (antes && antes.activo !== despues.activo) return despues.activo ? `reactivó el producto ${nombre}` : `desactivó el producto ${nombre}`
+    return `editó el producto ${nombre}`
+  }
   const verbo = m.accion === 'insert' ? 'creó' : m.accion === 'update' ? 'modificó' : 'eliminó'
   return `${verbo} ${que}`
 }

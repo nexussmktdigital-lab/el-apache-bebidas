@@ -11,8 +11,9 @@
     "test": "vitest run",
     "test:ui": "vitest run --project ui",
     "test:db": "vitest run --project db",
-    "db:push": "supabase db push",
-    "db:types": "supabase gen types typescript --linked --schema public > src/tipos/supabase.ts"
+    "db:push": "supabase db push --linked",
+    "db:types": "supabase gen types typescript --linked --schema public > src/tipos/supabase.gen.ts",
+    "db:seed": "supabase db push --linked --include-seed"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
@@ -20,7 +21,8 @@
     "lucide-react": "^0.487.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.5.1"
+    "react-router-dom": "^7.5.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.4",

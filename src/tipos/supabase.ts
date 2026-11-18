@@ -1,75 +1,67 @@
 // Tipos de la base de datos.
-// Escritos a mano para la fase 0; desde la fase 1 se generan con `npm run db:types`
-// (necesita el proyecto de Supabase asociado con `npx supabase link`).
+// `supabase.gen.ts` se genera desde la base real con `npm run db:types` (no editar a mano).
+// Acá van los alias cómodos que usa la interfaz.
 
-export type RolUsuario = 'superusuario' | 'administracion' | 'reparto'
+import type { Database as DatabaseGen } from './supabase.gen'
 
-export type Perfil = {
+export type Database = DatabaseGen
+export type { Json } from './supabase.gen'
+
+type Tablas = Database['public']['Tables']
+type Vistas = Database['public']['Views']
+type Enums = Database['public']['Enums']
+
+export type RolUsuario = Enums['rol_usuario']
+export type UnidadVenta = Enums['unidad_venta']
+
+export type Perfil = Tablas['perfiles']['Row']
+export type Configuracion = Tablas['configuracion']['Row']
+export type Auditoria = Vistas['v_auditoria']['Row']
+
+export type Categoria = Tablas['categorias']['Row']
+export type Marca = Tablas['marcas']['Row']
+export type Proveedor = Tablas['proveedores']['Row']
+export type Producto = Tablas['productos']['Row']
+export type ProductoCostos = Tablas['producto_costos']['Row']
+export type PrecioHistorial = Tablas['precios_historial']['Row']
+
+/** Fila de v_productos con la nulabilidad real: los costos son nulos para quien no puede verlos. */
+export type ProductoVista = {
   id: string
   nombre: string
-  rol: RolUsuario
+  codigo: string | null
+  unidad_venta: UnidadVenta
+  unidades_por_bulto: number
+  categoria_id: string | null
+  categoria: string | null
+  marca_id: string | null
+  marca: string | null
+  proveedor_id: string | null
+  proveedor: string | null
+  stock_actual: number
+  stock_minimo: number
+  precio_venta: number
   activo: boolean
-  creado_en: string
+  stock_bajo: boolean
+  costo_actual: number | null
+  margen_pct: number | null
+  precio_manual: number | null
+  margen_pesos: number | null
+  margen_real_pct: number | null
+  bajo_costo: boolean | null
   actualizado_en: string
 }
 
-export type Configuracion = {
-  id: boolean
-  nombre_negocio: string
-  sucursal: string
-  direccion: string
-  telefono: string
-  cuit: string
-  leyenda_comprobante: string
-  pie_comprobante: string
-  plazo_cc_dias: number
-  aviso_cc_dias: number
-  aviso_vencimiento_dias: number
-  redondeo_precio: 1 | 10 | 50 | 100
-  mensaje_whatsapp: string
-  actualizado_en: string
-  actualizado_por: string | null
+export type ValorStock = { productos: number; valor_costo: number; en_minimo: number }
+
+export const NOMBRE_UNIDAD: Record<UnidadVenta, string> = {
+  unidad: 'Unidad',
+  pack: 'Pack',
+  caja: 'Caja',
 }
 
-export type Auditoria = {
-  id: number
-  fecha: string
-  usuario_id: string | null
-  usuario: string | null
-  tabla: string
-  registro_id: string
-  accion: 'insert' | 'update' | 'delete'
-  antes: Record<string, unknown> | null
-  despues: Record<string, unknown> | null
-}
-
-type Tabla<Fila, Insert = Partial<Fila>, Update = Partial<Fila>> = {
-  Row: Fila
-  Insert: Insert
-  Update: Update
-  Relationships: []
-}
-
-export interface Database {
-  public: {
-    Tables: {
-      perfiles: Tabla<Perfil>
-      configuracion: Tabla<Configuracion>
-      auditoria: Tabla<Omit<Auditoria, 'usuario'>>
-    }
-    Views: {
-      v_auditoria: { Row: Auditoria; Relationships: [] }
-    }
-    Functions: {
-      auth_rol: { Args: Record<string, never>; Returns: RolUsuario | null }
-      es_superusuario: { Args: Record<string, never>; Returns: boolean }
-      ve_costos: { Args: Record<string, never>; Returns: boolean }
-      usuario_activo: { Args: Record<string, never>; Returns: boolean }
-      hoy_ar: { Args: Record<string, never>; Returns: string }
-    }
-    Enums: {
-      rol_usuario: RolUsuario
-    }
-    CompositeTypes: Record<string, never>
-  }
+/** "pack x6", "caja x12", "unidad" */
+export function etiquetaUnidad(unidad: UnidadVenta, porBulto: number): string {
+  if (unidad === 'unidad' || porBulto <= 1) return NOMBRE_UNIDAD[unidad].toLowerCase()
+  return `${NOMBRE_UNIDAD[unidad].toLowerCase()} x${porBulto}`
 }
