@@ -1,0 +1,70 @@
+Anexo I · Alcance
+
+Detalle de lo que incluye cada etapa. Forma parte del contrato.
+
+Etapa 1 · Sistema de gestión, El Apache Alta Córdoba
+
+1. Productos                                           6. Clientes y cuentas corrientes
+
+Alta, baja y edición. Categoría, marca y proveedor.    Ficha con teléfono, dirección y zona. Saldo y
+Unidad de venta: unidad, pack o caja. Código interno   movimientos de cada cliente. Registro de pagos y
+o de barras. Buscador y filtros. Activar o desactivar  entregas a cuenta. Aviso a los 7 días del
+
+sin borrar.                                            vencimiento. Enlace al WhatsApp del cliente con el
+                                                       mensaje armado. Lista de deudores.
+2. Stock
+Stock actual de cada producto. Mínimo elegido a        7. Gastos del negocio
+
+mano por producto. Aviso cuando llega al mínimo.       Carga con fecha, monto y categoría. Medio de pago
+Ajuste manual con motivo: rotura, vencido o conteo.    y a quién se le pagó. Categorías a elección. Los
+Historial de movimientos. Valor total del stock a      gastos entran en el balance.
+precio de costo.
+                                                       8. Informes
+
+3. Compras e ingreso de stock                          Balance diario y mensual con ventas, costo,
+Ingreso por proveedor y fecha. Cantidad y costo de     ganancia, gastos y resultado. Rango de fechas a
+cada producto. Fecha de vencimiento de lo que          elección. Comparación con el período anterior u
+ingresa. Actualización automática del costo. Aviso     otra fecha. Exportación a Excel.
+de productos por vencer. Lista de proveedores.
+                                                       9. Usuarios y seguridad
+4. Precios y márgenes                                  Tres usuarios: Lorenzo como superusuario, Thiago y
+Precio calculado con porcentaje sobre el costo.        Lorena con permisos propios. Registro de quién hizo
+Precio puesto a mano. Margen de ganancia en pesos      cada movimiento. Copia de seguridad diaria. Uso
+
+y en porcentaje. Aumento de precios por categoría      desde la computadora y el celular.
+o proveedor. Aviso si un precio queda por debajo del
+costo.                                                 10. Puesta en marcha
+                                                       Carga inicial de productos, clientes y saldos. Manual
+5. Ventas y repartos                                   de uso impreso y digital. Una capacitación para el
+
+Venta con varios productos en un mismo                 equipo. Acompañamiento la primera semana de uso.
+comprobante. Puede hacerse a nombre de un
+cliente o sin cliente, como venta de mostrador; la
+cuenta corriente requiere un cliente. Descuento del
+stock al confirmar. Pago en efectivo, transferencia o
+
+cuenta corriente. Comprobante interno para
+imprimir o enviar. Anulación con devolución del
+stock.
+
+Segunda entrega (15 de diciembre de 2026): comparación de períodos, exportación a Excel y avisos automáticos.
+
+Etapa 2 · Fideos Baguel
+
+    Bot de WhatsApp: responde consultas y precios, distingue mayorista de minorista, envía la lista de precios
+    que corresponde y deriva a una persona.
+    Página web: una página con quiénes son, productos, dónde comprar y botón a WhatsApp.
+    Publicidad en Meta: cuenta, medición y primera campaña a WhatsApp.
+Etapa 3 · El Apache Liceo
+    Catálogo web: productos con foto, precio, categorías y buscador, con pedido por WhatsApp y sin pago en
+    línea.
+    Bot con inteligencia artificial: responde las 24 horas con los precios y el stock del catálogo y deriva a una
+    persona.
+
+A definir antes de empezar
+Permisos de Thiago y Lorena:
+Venta de unidades sueltas además de packs:
+Datos del comprobante interno:
+Categorías de gastos:
+
+Firma NEXUSS  Firma del Cliente

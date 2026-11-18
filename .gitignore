@@ -1,0 +1,22 @@
+# dependencias y build
+node_modules/
+dist/
+.vite/
+
+# claves y entorno: nunca se suben
+.env
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/
+
+# postgres embebido para pruebas
+.pg-pruebas/
+
+# sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# salida de tsc
+*.tsbuildinfo
