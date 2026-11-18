@@ -36,7 +36,7 @@ beforeAll(async () => {
 })
 
 describe('cálculo de precios', () => {
-  it('redondea a 1, 10, 50 y 100', async () => {
+  it('redondea a 1, 10, 50 y 100, siempre para arriba', async () => {
     await como('servidor', async (c) => {
       const r = await c.query(`select
         public.redondear_precio(17324, 1)::int as a,
@@ -44,7 +44,7 @@ describe('cálculo de precios', () => {
         public.redondear_precio(17325, 10)::int as c,
         public.redondear_precio(17324, 50)::int as d,
         public.redondear_precio(17351, 100)::int as e`)
-      expect(r.rows[0]).toEqual({ a: 17324, b: 17320, c: 17330, d: 17300, e: 17400 })
+      expect(r.rows[0]).toEqual({ a: 17324, b: 17330, c: 17330, d: 17350, e: 17400 })
     })
   })
 
@@ -54,8 +54,8 @@ describe('cálculo de precios', () => {
         public.calcular_precio(14200, 22, null, 10)::int as calculado,
         public.calcular_precio(14200, 22, 17999, 10)::int as manual,
         public.calcular_precio(0, 30, null, 10)::int as sin_costo`)
-      // 14200 × 1,22 = 17324 → 17320
-      expect(r.rows[0]).toEqual({ calculado: 17320, manual: 17999, sin_costo: 0 })
+      // 14200 × 1,22 = 17324 → 17330 (para arriba)
+      expect(r.rows[0]).toEqual({ calculado: 17330, manual: 17999, sin_costo: 0 })
     })
   })
 })
@@ -78,19 +78,19 @@ describe('alta y edición de productos', () => {
       expect(p).toMatchObject({
         nombre: 'Coca-Cola 2,25 L',
         codigo: 'COCA225',
-        precio_venta: 17320,
+        precio_venta: 17330,
         costo_actual: 14200,
         margen_pct: 22,
         precio_manual: null,
-        margen_pesos: 3120,
+        margen_pesos: 3130,
         bajo_costo: false,
         activo: true,
         stock_actual: 0,
       })
-      expect(p.margen_real_pct).toBeCloseTo(18.0, 1)
+      expect(p.margen_real_pct).toBeCloseTo(18.1, 1) // 3130 / 17330
 
       const h = await c.query(`select motivo, precio_venta::int from public.precios_historial where producto_id = $1 order by id`, [id])
-      expect(h.rows).toEqual([{ motivo: 'alta', precio_venta: 17320 }])
+      expect(h.rows).toEqual([{ motivo: 'alta', precio_venta: 17330 }])
     })
   })
 
@@ -120,7 +120,7 @@ describe('alta y edición de productos', () => {
 
       // Volver al cálculo automático.
       await c.query(`update public.producto_costos set precio_manual = null where producto_id = $1`, [id])
-      expect((await leer(c, id)).precio_venta).toBe(33230) // 26800 × 1,24 = 33232 → 33230
+      expect((await leer(c, id)).precio_venta).toBe(33240) // 26800 × 1,24 = 33232 → 33240
     })
   })
 
@@ -214,9 +214,9 @@ describe('redondeo configurable', () => {
     await como('lorenzo', async (c) => {
       const auto = await crearProducto(c, { nombre: 'Redondeo auto', categoria_id: catGaseosas, costo_actual: 14200, margen_pct: 22 }) // 17324
       const manual = await crearProducto(c, { nombre: 'Redondeo manual', categoria_id: catGaseosas, costo_actual: 14200, precio_manual: 17999 })
-      expect((await leer(c, auto)).precio_venta).toBe(17320)
+      expect((await leer(c, auto)).precio_venta).toBe(17330)
       await c.query(`update public.configuracion set redondeo_precio = 100`)
-      expect((await leer(c, auto)).precio_venta).toBe(17300)
+      expect((await leer(c, auto)).precio_venta).toBe(17400)
       expect((await leer(c, manual)).precio_venta).toBe(17999)
       await c.query(`update public.configuracion set redondeo_precio = 1`)
       expect((await leer(c, auto)).precio_venta).toBe(17324)

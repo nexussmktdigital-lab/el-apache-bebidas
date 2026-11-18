@@ -9,6 +9,7 @@ import { Modal } from '@/componentes/Modal'
 import { useAvisar } from '@/componentes/Toast'
 import { useProductos, mensajeError } from '@/modulos/productos/api'
 import { useClientes } from '@/modulos/clientes/api'
+import { FormularioCliente } from '@/modulos/clientes/Clientes'
 import { useAnularVenta, useConfirmarVenta, useVentas } from './api'
 import { Comprobante } from './Comprobante'
 
@@ -41,6 +42,8 @@ export function Ventas() {
   const [comprobante, setComprobante] = useState<string | null>(null)
   const [rango, setRango] = useState<'hoy' | '7' | '30'>('hoy')
   const [anulando, setAnulando] = useState<VentaVista | null>(null)
+  const [nuevoCliente, setNuevoCliente] = useState(false)
+  const creaClientes = puede(perfil.rol, 'editar_clientes')
 
   const hoy = hoyISO()
   const desde = rango === 'hoy' ? hoy : restarDias(hoy, rango === '7' ? 6 : 29)
@@ -227,12 +230,19 @@ export function Ventas() {
         <Panel titulo="Cerrar la venta">
           <div className="flex flex-col gap-3">
             <Campo etiqueta="Cliente">
-              <Selector value={clienteId} onChange={(e) => setClienteId(e.target.value)}>
-                <option value="">Sin cliente · venta de mostrador</option>
-                {clientes.data?.filter((c) => c.activo).map((c) => (
-                  <option key={c.id} value={c.id}>{c.nombre}{c.zona ? ` · ${c.zona}` : ''}</option>
-                ))}
-              </Selector>
+              <div className="flex gap-1.5">
+                <Selector className="min-w-0 flex-1" value={clienteId} onChange={(e) => setClienteId(e.target.value)}>
+                  <option value="">Sin cliente · venta de mostrador</option>
+                  {clientes.data?.filter((c) => c.activo).map((c) => (
+                    <option key={c.id} value={c.id}>{c.nombre}{c.zona ? ` · ${c.zona}` : ''}</option>
+                  ))}
+                </Selector>
+                {creaClientes && (
+                  <Boton type="button" onClick={() => setNuevoCliente(true)} title="Nuevo cliente">
+                    <Plus size={16} /> Nuevo
+                  </Boton>
+                )}
+              </div>
             </Campo>
             <Campo etiqueta="Forma de pago">
               <Selector value={forma} onChange={(e) => setForma(e.target.value as FormaPago)}>
@@ -326,6 +336,7 @@ export function Ventas() {
 
       {comprobante && <Comprobante ventaId={comprobante} onCerrar={() => setComprobante(null)} />}
       {anulando && <AnularVenta venta={anulando} onCerrar={() => setAnulando(null)} />}
+      {nuevoCliente && <FormularioCliente cliente={null} onCerrar={() => setNuevoCliente(false)} onGuardado={(id) => setClienteId(id)} />}
     </>
   )
 }

@@ -22,7 +22,7 @@ hoja(
     ['1. Completá una fila por producto en la hoja "Productos", una por cliente en "Clientes" y una por proveedor en "Proveedores".'],
     ['2. No cambies los títulos de las columnas ni el orden de las hojas.'],
     ['3. Los precios y costos van en pesos enteros, sin puntos ni símbolos (ejemplo: 14200).'],
-    ['4. "Unidad de venta" acepta: unidad, pack o caja. "Unidades por bulto" es cuántas unidades trae el pack o la caja (si es unidad, poné 1).'],
+    ['4. "Unidad de venta" acepta: unidad, pack, caja o cajon. "Unidades por bulto" es cuántas botellas o latas trae el pack, la caja o el cajón (si es unidad, poné 1).'],
     ['5. Si cargás "Precio de venta", ese precio queda puesto a mano. Si lo dejás vacío, el sistema lo calcula con "% de ganancia" sobre el costo.'],
     ['6. "Stock actual" es lo que hay hoy en el depósito, contado en la unidad de venta (packs, cajas o unidades).'],
     ['7. En "Clientes", "Saldo que debe" es lo que debe hoy en cuenta corriente, y "Debe desde" la fecha de la deuda más vieja (día/mes/año).'],

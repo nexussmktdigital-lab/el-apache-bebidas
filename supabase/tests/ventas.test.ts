@@ -51,7 +51,7 @@ beforeAll(async () => {
 describe('confirmar venta', () => {
   it('una venta de mostrador guarda precio y costo del momento, descuenta stock y deja movimientos', async () => {
     await como('lorena', async (c) => {
-      const coca = await producto(c, 'Coca venta', 14200, 22, 20) // precio 17320
+      const coca = await producto(c, 'Coca venta', 14200, 22, 20) // precio 17330
       const agua = await producto(c, 'Agua venta', 5400, 30, 10) // precio 7020
 
       // Thiago puede vender aunque no vea costos.
@@ -59,7 +59,7 @@ describe('confirmar venta', () => {
       const id = await vender(c, [{ producto_id: coca, cantidad: 2 }, { producto_id: agua, cantidad: 1 }])
 
       const v = await venta(c, id)
-      expect(v).toMatchObject({ cliente: null, forma_pago: 'efectivo', estado: 'confirmada', total: 2 * 17320 + 7020, items: 2, usuario: 'Thiago', vence_el: null })
+      expect(v).toMatchObject({ cliente: null, forma_pago: 'efectivo', estado: 'confirmada', total: 2 * 17330 + 7020, items: 2, usuario: 'Thiago', vence_el: null })
       expect(v.detalle).toContain('2 x Coca venta')
       // Sin permiso de costos: la vista no le muestra costo ni ganancia.
       expect(v.costo_total).toBeNull()
@@ -71,7 +71,7 @@ describe('confirmar venta', () => {
       const items = await c.query(`select descripcion, unidad, cantidad, precio_unitario::int, subtotal::int from public.venta_items where venta_id = $1 order by descripcion`, [id])
       expect(items.rows).toEqual([
         { descripcion: 'Agua venta', unidad: 'unidad', cantidad: 1, precio_unitario: 7020, subtotal: 7020 },
-        { descripcion: 'Coca venta', unidad: 'unidad', cantidad: 2, precio_unitario: 17320, subtotal: 34640 },
+        { descripcion: 'Coca venta', unidad: 'unidad', cantidad: 2, precio_unitario: 17330, subtotal: 34660 },
       ])
       expect((await c.query(`select * from public.venta_item_costos`)).rowCount).toBe(0)
       expect((await c.query(`select * from public.v_movimientos_stock where referencia_id = $1`, [id])).rowCount).toBe(0) // Thiago no ve movimientos

@@ -1339,7 +1339,7 @@ export type Database = {
         | "venta"
         | "anulacion_venta"
         | "ajuste"
-      unidad_venta: "unidad" | "pack" | "caja"
+      unidad_venta: "unidad" | "pack" | "caja" | "cajon"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1479,7 +1479,7 @@ export const Constants = {
         "anulacion_venta",
         "ajuste",
       ],
-      unidad_venta: ["unidad", "pack", "caja"],
+      unidad_venta: ["unidad", "pack", "caja", "cajon"],
     },
   },
 } as const

@@ -59,6 +59,7 @@ export const NOMBRE_UNIDAD: Record<UnidadVenta, string> = {
   unidad: 'Unidad',
   pack: 'Pack',
   caja: 'Caja',
+  cajon: 'Cajón',
 }
 
 /** "pack x6", "caja x12", "unidad" */

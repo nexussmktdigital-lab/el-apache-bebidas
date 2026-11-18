@@ -304,7 +304,7 @@ function FichaCliente({ cliente, onCerrar, onEditar, onPagar }: { cliente: Clien
   )
 }
 
-function FormularioCliente({ cliente, onCerrar }: { cliente: ClienteVista | null; onCerrar: () => void }) {
+export function FormularioCliente({ cliente, onCerrar, onGuardado }: { cliente: ClienteVista | null; onCerrar: () => void; onGuardado?: (id: string) => void }) {
   const guardar = useGuardarCliente()
   const avisar = useAvisar()
   const [f, setF] = useState<DatosCliente>({
@@ -324,8 +324,9 @@ function FormularioCliente({ cliente, onCerrar }: { cliente: ClienteVista | null
     e.preventDefault()
     if (!f.nombre.trim()) return setError('Escribí el nombre del cliente.')
     guardar.mutate({ ...f, nombre: f.nombre.trim() }, {
-      onSuccess: () => {
+      onSuccess: (id) => {
         avisar(cliente ? 'Cliente guardado' : 'Cliente cargado', 'ok')
+        onGuardado?.(id)
         onCerrar()
       },
       onError: (err) => setError(mensajeError(err)),

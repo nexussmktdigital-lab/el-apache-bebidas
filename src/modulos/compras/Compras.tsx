@@ -5,7 +5,7 @@ import { Modal } from '@/componentes/Modal'
 import { useAvisar } from '@/componentes/Toast'
 import { aPesos, fecha, fechaHora, hoyISO, pesos } from '@/lib/formato'
 import { etiquetaUnidad, type CompraVista, type ProductoVista } from '@/tipos/supabase'
-import { useProductos, useProveedores, mensajeError } from '@/modulos/productos/api'
+import { useProductos, useProveedores, useGuardarItemLista, mensajeError } from '@/modulos/productos/api'
 import { useCompraItems, useCompras, useRegistrarCompra, type ItemCompra } from '@/modulos/stock/api'
 import { PanelPorVencer } from '@/modulos/stock/PanelPorVencer'
 
@@ -19,6 +19,7 @@ export function Compras() {
   const proveedores = useProveedores()
   const compras = useCompras()
   const registrar = useRegistrarCompra()
+  const nuevoProveedor = useGuardarItemLista('proveedores')
 
   const [proveedor, setProveedor] = useState('')
   const [fechaCompra, setFechaCompra] = useState(hoyISO())
@@ -26,7 +27,7 @@ export function Compras() {
   const [renglones, setRenglones] = useState<Renglon[]>([])
   const [productoSel, setProductoSel] = useState('')
   const [cantidad, setCantidad] = useState('')
-  const [costo, setCosto] = useState('')
+  const [costoUnidad, setCostoUnidad] = useState('')
   const [vencimiento, setVencimiento] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [detalle, setDetalle] = useState<CompraVista | null>(null)
@@ -36,25 +37,40 @@ export function Compras() {
   const seleccionado = porId.get(productoSel) ?? null
   const total = renglones.reduce((s, r) => s + r.cantidad * r.costo_unitario, 0)
 
+  // El costo se carga por unidad (botella o lata); el sistema calcula el costo del bulto.
+  const porBulto = seleccionado?.unidades_por_bulto ?? 1
+  const costoUnidadNum = aPesos(costoUnidad)
+  const costoBulto = costoUnidadNum != null ? costoUnidadNum * porBulto : null
+
   function elegirProducto(id: string) {
     setProductoSel(id)
     const p = porId.get(id)
-    setCosto(p?.costo_actual != null ? String(p.costo_actual) : '')
-    if (!cantidad) setCantidad('')
+    setCostoUnidad(p?.costo_actual != null ? String(Math.ceil(p.costo_actual / (p.unidades_por_bulto || 1))) : '')
+  }
+
+  async function agregarProveedor() {
+    const nombre = window.prompt('Nombre del nuevo proveedor:')?.trim()
+    if (!nombre) return
+    try {
+      const id = await nuevoProveedor.mutateAsync({ nombre })
+      setProveedor(id)
+      avisar(`Se agregó el proveedor ${nombre}`, 'ok')
+    } catch (e) {
+      avisar(mensajeError(e), 'mal')
+    }
   }
 
   function agregar(e: FormEvent) {
     e.preventDefault()
     setError(null)
     const n = Number.parseInt(cantidad, 10)
-    const c = aPesos(costo)
     if (!seleccionado) return setError('Elegí un producto.')
-    if (!Number.isFinite(n) || n <= 0) return setError('Escribí la cantidad que ingresa.')
-    if (c == null || c < 0) return setError('Escribí el costo por unidad de venta.')
-    setRenglones((r) => [...r, { clave: Date.now(), producto_id: seleccionado.id, cantidad: n, costo_unitario: c, fecha_vencimiento: vencimiento || null }])
+    if (!Number.isFinite(n) || n <= 0) return setError(`Escribí cuántos ${etiquetaUnidad(seleccionado.unidad_venta, seleccionado.unidades_por_bulto)} ingresan.`)
+    if (costoBulto == null || costoBulto < 0) return setError('Escribí el costo por unidad (botella o lata).')
+    setRenglones((r) => [...r, { clave: Date.now(), producto_id: seleccionado.id, cantidad: n, costo_unitario: costoBulto, fecha_vencimiento: vencimiento || null }])
     setProductoSel('')
     setCantidad('')
-    setCosto('')
+    setCostoUnidad('')
     setVencimiento('')
   }
 
@@ -82,12 +98,17 @@ export function Compras() {
       <Panel titulo="Nuevo ingreso">
         <div className="mb-3 grid gap-3 md:grid-cols-3">
           <Campo etiqueta="Proveedor">
-            <Selector value={proveedor} onChange={(e) => setProveedor(e.target.value)}>
-              <option value="">Sin proveedor</option>
-              {proveedores.data?.filter((p) => p.activo).map((p) => (
-                <option key={p.id} value={p.id}>{p.nombre}</option>
-              ))}
-            </Selector>
+            <div className="flex gap-1.5">
+              <Selector className="min-w-0 flex-1" value={proveedor} onChange={(e) => setProveedor(e.target.value)}>
+                <option value="">Sin proveedor</option>
+                {proveedores.data?.filter((p) => p.activo).map((p) => (
+                  <option key={p.id} value={p.id}>{p.nombre}</option>
+                ))}
+              </Selector>
+              <Boton type="button" onClick={() => void agregarProveedor()} title="Nuevo proveedor">
+                <Plus size={16} /> Nuevo
+              </Boton>
+            </div>
           </Campo>
           <Campo etiqueta="Fecha">
             <Entrada type="date" value={fechaCompra} max={hoyISO()} onChange={(e) => setFechaCompra(e.target.value)} />
@@ -111,8 +132,19 @@ export function Compras() {
           <Campo etiqueta={seleccionado ? `Cantidad (${etiquetaUnidad(seleccionado.unidad_venta, seleccionado.unidades_por_bulto)})` : 'Cantidad'}>
             <Entrada type="number" min={1} inputMode="numeric" value={cantidad} onChange={(e) => setCantidad(e.target.value)} />
           </Campo>
-          <Campo etiqueta="Costo por unidad de venta" ayuda={seleccionado?.costo_actual != null ? `Costo actual: ${pesos(seleccionado.costo_actual)}` : undefined}>
-            <Entrada inputMode="numeric" value={costo} onChange={(e) => setCosto(e.target.value)} />
+          <Campo
+            etiqueta="Costo por unidad (botella o lata)"
+            ayuda={
+              seleccionado
+                ? costoBulto != null && porBulto > 1
+                  ? `= ${pesos(costoBulto)} por ${etiquetaUnidad(seleccionado.unidad_venta, seleccionado.unidades_por_bulto)}`
+                  : seleccionado.costo_actual != null
+                    ? `Costo actual: ${pesos(seleccionado.costo_actual)} por ${etiquetaUnidad(seleccionado.unidad_venta, seleccionado.unidades_por_bulto)}`
+                    : undefined
+                : undefined
+            }
+          >
+            <Entrada inputMode="numeric" value={costoUnidad} onChange={(e) => setCostoUnidad(e.target.value)} />
           </Campo>
           <Campo etiqueta="Vencimiento" ayuda="Opcional.">
             <Entrada type="date" min={hoyISO()} value={vencimiento} onChange={(e) => setVencimiento(e.target.value)} />
@@ -127,7 +159,8 @@ export function Compras() {
             <tr>
               <th>Producto</th>
               <th className="text-right!">Cantidad</th>
-              <th className="text-right!">Costo</th>
+              <th className="text-right!">Costo por unidad</th>
+              <th className="text-right!">Costo por bulto</th>
               <th className="text-right!">Subtotal</th>
               <th>Vence</th>
               <th></th>
@@ -136,7 +169,7 @@ export function Compras() {
           <tbody>
             {renglones.length === 0 && (
               <tr>
-                <td colSpan={6} className="text-mudo">Todavía no agregaste productos a este ingreso.</td>
+                <td colSpan={7} className="text-mudo">Todavía no agregaste productos a este ingreso.</td>
               </tr>
             )}
             {renglones.map((r) => {
@@ -152,7 +185,8 @@ export function Compras() {
                       </small>
                     )}
                   </td>
-                  <td className="text-right">{r.cantidad}</td>
+                  <td className="text-right whitespace-nowrap">{r.cantidad} {p ? etiquetaUnidad(p.unidad_venta, p.unidades_por_bulto) : ''}</td>
+                  <td className="text-right">{pesos(Math.round(r.costo_unitario / (p?.unidades_por_bulto || 1)))}</td>
                   <td className="text-right">{pesos(r.costo_unitario)}</td>
                   <td className="text-right font-semibold">{pesos(r.cantidad * r.costo_unitario)}</td>
                   <td>{r.fecha_vencimiento ? fecha(r.fecha_vencimiento) : '—'}</td>

@@ -222,24 +222,19 @@ Respuestas de Lorenzo al listado de preguntas y cómo quedaron aplicadas.
 | Usuarios | Lorenzo (superusuario), **Thiago** (administración) y **Patricia** (ventas y cobros). Lorena no es usuaria. | Los accesos reales se crean en el proyecto de producción, en la puesta en marcha. En desarrollo siguen los usuarios de prueba (el de "Lorena" cumple el rol de administración). |
 | Permisos de Thiago | Carga productos, compras, ventas, cobros y gastos; ve costos y cambia precios; anula ventas del día; **no ve ganancias**, informes ni usuarios. | Aplicado: nueva función `ve_ganancias()` (solo superusuario); los costos de cada venta quedan ocultos por RLS para administración, así ganancia de ventas, del día e informes salen nulas. En pantalla se ocultan "Ganancia" y "Margen". |
 | Permisos de Patricia | Solo vender y cobrar cuentas corrientes; no puede cambiar precios mientras factura. | Ya era así en el rol "reparto", renombrado en pantalla como "Ventas y cobros". |
-| Unidades sueltas | Venden por pack/caja y también sueltas; Thiago manda la lista de artículos. | **Pendiente de definir el modelo** (ver propuesta abajo). |
+| Unidades sueltas | **No se venden unidades sueltas**: todo por pack, caja o cajón (si alguna vez se vendieran, sería a otro precio). | Descartado. Se agregó "cajón" como unidad de venta. |
 | Cuenta corriente | Vence a los 7 días; aviso 1 día antes. | Aplicado como valor por defecto y en la base de desarrollo. Configurable. |
 | Mensaje de WhatsApp | "Hola, {cliente}. Te escribimos de El Apache Bebidas. Tu cuenta corriente tiene un saldo de {saldo} que {vencimiento}." | Aplicado. |
 | Comprobante | Solo el logo arriba. Pie: más adelante. | Aplicado: el encabezado lleva solo el logo; en Configuración hay una casilla para mostrar los datos si cambian de idea. |
 | Categorías de gastos | Combustible, Sueldos, Alquiler, Servicios, Mantenimiento, Otros. | Van en la fase 4. |
-| Redondeo | "Precio redondo". | **A confirmar**: se interpreta como redondeo a $100. Hoy está en $10. |
+| Redondeo | "Precio redondo, siempre en 10 para arriba". | Aplicado: el precio calculado se redondea al múltiplo de $10 siguiente (nunca para abajo). |
 | Costo nuevo | El precio se actualiza solo con el porcentaje de ganancia. | Ya era así. |
 | Productos por vencer | Aviso 15 días antes. | Aplicado. |
 | Datos de carga y logo | Pendientes de recibir. | La plantilla Excel está en `docs/plantilla-carga-inicial.xlsx`. |
 
-### Propuesta para unidades sueltas
+### Pedidos de la primera prueba de Lorenzo (18 de noviembre)
 
-Hoy el stock se cuenta en la unidad de venta del producto (packs o cajas). Para vender también sueltos con el mismo stock:
-
-- El stock interno pasa a contarse en **unidades** (botellas o latas). Un pack de 6 que ingresa suma 6 unidades. En pantalla se muestra como "18 packs + 3 unidades".
-- Cada producto que admite sueltos tiene un **precio por unidad suelta** (a mano o calculado con su propio porcentaje de ganancia sobre el costo por unidad).
-- En la venta, cada renglón se elige como pack/caja o como unidad suelta, y el stock se descuenta en unidades.
-- Las compras siguen cargándose por pack/caja (con la opción de cargar unidades sueltas si llegan así).
-- El valor del stock, los lotes y el vencimiento no cambian de lógica: se calculan sobre unidades.
-
-Impacto: una migración que convierte el stock actual a unidades, ajustes en compras, ventas, ajustes de stock, importación y pantallas. Estimado: un día y medio de trabajo. Conviene hacerlo **antes de la carga inicial** (fase 5) para no migrar datos dos veces. No hace falta la lista de Thiago para construirlo: la marca de "admite sueltos" y el precio por unidad se cargan por producto desde el sistema o desde la planilla.
+- Ventas: botón para dar de alta un cliente desde la misma pantalla de venta. **Hecho.**
+- Compras: la cantidad va por pack, caja o cajón; el costo se carga **por unidad** (botella o lata) y el sistema calcula el costo del bulto y el total. **Hecho.** El costo del producto sigue guardándose por unidad de venta (bulto).
+- Compras: botón para agregar un proveedor sin salir. **Hecho.**
+- Comprobante: salía en blanco al imprimir. **Arreglado**: se imprime una copia limpia del comprobante, sin encabezado ni pie del navegador.

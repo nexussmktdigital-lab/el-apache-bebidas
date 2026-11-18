@@ -237,9 +237,10 @@ export function FormularioProducto({
                 <option value="unidad">Unidad</option>
                 <option value="pack">Pack</option>
                 <option value="caja">Caja</option>
+                <option value="cajon">Cajón</option>
               </Selector>
             </Campo>
-            <Campo etiqueta="Unidades por pack o caja" ayuda="Si se vende por unidad, dejá 1.">
+            <Campo etiqueta="Unidades por pack, caja o cajón" ayuda="Cuántas botellas o latas trae. Si se vende por unidad, dejá 1.">
               <Entrada type="number" min={1} max={1000} value={f.unidades_por_bulto} disabled={f.unidad_venta === 'unidad'} onChange={(e) => set('unidades_por_bulto', Math.max(1, Number.parseInt(e.target.value || '1', 10) || 1))} />
             </Campo>
             <Campo etiqueta="Stock mínimo" ayuda="Cuando el stock llega a este número, el sistema avisa.">

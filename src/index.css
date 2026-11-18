@@ -54,18 +54,31 @@ h3 {
   letter-spacing: -0.01em;
 }
 
-/* Al imprimir solo se ve el área marcada con .imprimible */
+/* Impresión: solo se imprime lo que está dentro de .solo-impresion (ver componentes/Impresion.tsx).
+   En pantalla ese bloque no se ve. Sin márgenes de página para que el navegador no agregue
+   la URL y la fecha arriba y abajo; el margen lo pone el propio comprobante. */
+.solo-impresion {
+  display: none;
+}
+
 @media print {
-  body * {
-    visibility: hidden;
+  @page {
+    size: A4;
+    margin: 0;
   }
-  .imprimible,
-  .imprimible * {
-    visibility: visible;
+  html,
+  body,
+  #root {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
   }
-  .imprimible {
-    position: absolute;
-    inset: 0;
-    padding: 0;
+  body > *:not(.solo-impresion) {
+    display: none !important;
+  }
+  .solo-impresion {
+    display: block;
+    padding: 14mm 16mm;
+    color: #000;
   }
 }

@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import type { Categoria, Marca, PrecioHistorial, ProductoVista, Proveedor, ValorStock } from '@/tipos/supabase'
+import type { Categoria, Marca, PrecioHistorial, ProductoVista, Proveedor, UnidadVenta, ValorStock } from '@/tipos/supabase'
 
 // Acceso a datos del módulo Productos. Todo pasa por RLS: lo que el rol no
 // puede ver llega nulo o vacío, y lo que no puede hacer falla.
@@ -76,7 +76,7 @@ export interface DatosProducto {
   categoria_id: string | null
   marca_id: string | null
   proveedor_id: string | null
-  unidad_venta: 'unidad' | 'pack' | 'caja'
+  unidad_venta: UnidadVenta
   unidades_por_bulto: number
   codigo: string
   stock_minimo: number
