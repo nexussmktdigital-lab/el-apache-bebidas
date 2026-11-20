@@ -9,6 +9,7 @@ import {
   BarChart3,
   ShieldCheck,
   Settings,
+  FileUp,
 } from 'lucide-react'
 import type { Pantalla } from '@/lib/permisos'
 
@@ -49,6 +50,7 @@ export const GRUPOS: GrupoNav[] = [
       { pantalla: 'informes', ruta: '/informes', titulo: 'Informes', corto: 'Informes', icono: BarChart3 },
       { pantalla: 'usuarios', ruta: '/usuarios', titulo: 'Usuarios', corto: 'Usuarios', icono: ShieldCheck },
       { pantalla: 'configuracion', ruta: '/configuracion', titulo: 'Configuración', corto: 'Config.', icono: Settings },
+      { pantalla: 'importacion', ruta: '/importacion', titulo: 'Importar datos', corto: 'Importar', icono: FileUp },
     ],
   },
 ]

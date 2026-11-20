@@ -24,3 +24,9 @@ Thumbs.db
 # credenciales locales (usuarios de prueba, etc.)
 *.local.txt
 *.local.md
+
+# datos reales de usuarios (fuera del repo)
+*.local.json
+
+# respaldos de la base (fuera del repo)
+respaldos/

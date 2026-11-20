@@ -13,6 +13,7 @@ import { Ventas } from '@/modulos/ventas/Ventas'
 import { Clientes } from '@/modulos/clientes/Clientes'
 import { Gastos } from '@/modulos/gastos/Gastos'
 import { Informes } from '@/modulos/informes/Informes'
+import { Importacion } from '@/modulos/importacion/Importacion'
 import { NoEncontrado } from '@/modulos/NoEncontrado'
 
 export const router = createBrowserRouter([
@@ -34,6 +35,7 @@ export const router = createBrowserRouter([
           { path: '/informes', element: <RutaPorRol pantalla="informes"><Informes /></RutaPorRol> },
           { path: '/usuarios', element: <RutaPorRol pantalla="usuarios"><Usuarios /></RutaPorRol> },
           { path: '/configuracion', element: <RutaPorRol pantalla="configuracion"><Configuracion /></RutaPorRol> },
+          { path: '/importacion', element: <RutaPorRol pantalla="importacion"><Importacion /></RutaPorRol> },
           { path: '/inicio', element: <Navigate to="/" replace /> },
           { path: '*', element: <NoEncontrado /> },
         ],

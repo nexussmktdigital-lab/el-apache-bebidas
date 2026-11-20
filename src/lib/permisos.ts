@@ -13,6 +13,7 @@ export type Pantalla =
   | 'informes'
   | 'usuarios'
   | 'configuracion'
+  | 'importacion'
 
 export type Accion =
   | 'ver_costos'
@@ -32,7 +33,7 @@ export type Accion =
   | 'importar_datos'
 
 const PANTALLAS: Record<RolUsuario, Pantalla[]> = {
-  superusuario: ['inicio', 'ventas', 'clientes', 'productos', 'compras', 'gastos', 'informes', 'usuarios', 'configuracion'],
+  superusuario: ['inicio', 'ventas', 'clientes', 'productos', 'compras', 'gastos', 'informes', 'usuarios', 'configuracion', 'importacion'],
   administracion: ['inicio', 'ventas', 'clientes', 'productos', 'compras', 'gastos'],
   reparto: ['inicio', 'ventas', 'clientes', 'productos'],
 }
