@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual de uso · El Apache Bebidas</title>
+<style>
+  :root { --azul: #1F5AC8; --azul-oscuro: #103A8B; --amarillo: #F5B301; --tinta: #16161D; --gris: #4B5565; --borde: #E7EAF0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Segoe UI', system-ui, Arial, sans-serif; color: var(--tinta); line-height: 1.55; font-size: 15px; background: #fff; }
+  main { max-width: 820px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { color: var(--azul-oscuro); font-size: 30px; margin: 0 0 6px; border-bottom: 4px solid var(--amarillo); padding-bottom: 10px; }
+  h2 { color: var(--azul); font-size: 21px; margin: 34px 0 10px; page-break-after: avoid; }
+  h3 { font-size: 16px; margin: 20px 0 6px; }
+  p, li { color: var(--tinta); }
+  hr { border: 0; border-top: 1px solid var(--borde); margin: 28px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--borde); padding: 6px 10px; text-align: left; }
+  th { background: #EEF3FF; color: var(--azul-oscuro); }
+  td:not(:first-child), th:not(:first-child) { text-align: center; }
+  code { background: #F3F5F9; padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  strong { color: var(--tinta); }
+  a { color: var(--azul); }
+  @media print {
+    @page { size: A4; margin: 16mm; }
+    main { padding: 0; max-width: none; }
+    h2 { page-break-before: auto; }
+    table, li { page-break-inside: avoid; }
+    a { text-decoration: none; color: inherit; }
+  }
+</style>
+</head>
+<body>
+<main>
+<h1>Manual de uso · Sistema de gestión El Apache Bebidas</h1>
+<p>Sucursal Alta Córdoba · Reparto. Versión 1, noviembre de 2026. Desarrollado por NEXUSS Agencia Digital.</p>
+<p>Este manual explica cómo usar el sistema en el trabajo de todos los días. Está pensado para leerse en diez minutos y tenerlo a mano. Si algo no funciona como dice acá, escribile a NEXUSS.</p>
+<hr>
+<h2>1. Entrar al sistema</h2>
+<ul>
+<li>Dirección: <strong><a href="https://el-apache-bebidas.nexuss-mktdigital.workers.dev">https://el-apache-bebidas.nexuss-mktdigital.workers.dev</a></strong> (se puede agregar a la pantalla de inicio del celular como si fuera una aplicación).</li>
+<li>Cada persona entra con su <strong>email y contraseña</strong>. No se comparten usuarios: el sistema registra quién hizo cada cosa.</li>
+<li>Si te olvidás la contraseña, pedile a Lorenzo que te la cambie.</li>
+<li>Para salir, tocá el ícono de salida abajo a la izquierda (en el celular, dentro del menú &quot;Más&quot;).</li>
+</ul>
+<h3>Quién puede hacer qué</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th align="center">Lorenzo</th>
+<th align="center">Thiago</th>
+<th align="center">Patricia</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vender y emitir comprobantes</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+</tr>
+<tr>
+<td>Cobrar cuentas corrientes y avisar por WhatsApp</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+</tr>
+<tr>
+<td>Ver precios de venta y stock</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+</tr>
+<tr>
+<td>Cargar y editar productos, cambiar precios</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Ver costos</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Compras y ajustes de stock</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Gastos</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Anular ventas</td>
+<td align="center">Cualquiera</td>
+<td align="center">Solo las del día</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Ver ganancias e informes</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Usuarios, configuración e importación</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Inicio (el tablero)</h2>
+<p>Lo primero que se ve al entrar. Muestra el resumen de hoy:</p>
+<ul>
+<li><strong>Ventas de hoy</strong>, <strong>Ganancia de hoy</strong> (solo Lorenzo), <strong>Valor del stock</strong> a costo y <strong>Por cobrar</strong>.</li>
+<li><strong>Stock en el mínimo</strong>: productos que llegaron al mínimo que vos elegiste. Hay que reponer.</li>
+<li><strong>Cuentas por vencer</strong>: clientes con deuda próxima a vencer o vencida, con el botón de WhatsApp.</li>
+<li><strong>Productos por vencer</strong>: mercadería que vence dentro del plazo de aviso (15 días).</li>
+<li>Más abajo: ventas de los últimos 30 días, ventas por categoría y productos más vendidos.</li>
+</ul>
+<hr>
+<h2>3. Vender</h2>
+<p>Menú <strong>Ventas y repartos</strong>.</p>
+<ol>
+<li>En el buscador escribí parte del nombre o el código del producto. Si hay un solo resultado, <strong>Enter</strong> lo agrega; si hay varios, tocá el que corresponda.</li>
+<li>Ajustá la cantidad con <strong>+</strong> y <strong>−</strong> o escribiéndola. El sistema no deja vender más de lo que hay en stock.</li>
+<li>Elegí el <strong>cliente</strong> (o dejá &quot;Sin cliente&quot; para una venta de mostrador). Si el cliente no existe, botón <strong>Nuevo</strong>.</li>
+<li>Elegí la <strong>forma de pago</strong>: efectivo, transferencia o cuenta corriente. La cuenta corriente siempre necesita un cliente.</li>
+<li><strong>Confirmar venta</strong>. El stock baja en ese momento y se abre el <strong>comprobante</strong> para imprimir o guardar como PDF.</li>
+</ol>
+<p>En &quot;Ventas de hoy&quot; se ven las ventas del día (o de los últimos 7 o 30 días), con el botón de comprobante y, para quien puede, el de anular.</p>
+<h3>Anular una venta</h3>
+<p>Solo si hubo un error o el cliente devolvió todo. Pide un motivo. El stock vuelve al depósito y, si era cuenta corriente, el importe se descuenta de la deuda del cliente. La venta no se borra: queda tachada con el motivo. Thiago solo puede anular ventas del mismo día; Lorenzo, cualquiera.</p>
+<hr>
+<h2>4. Cuentas corrientes</h2>
+<p>Menú <strong>Cuentas corrientes</strong>. Arriba: total por cobrar, cuentas vencidas y por vencer. La lista muestra primero las vencidas, después las que están por vencer y por último las al día.</p>
+<ul>
+<li>Una venta en cuenta corriente <strong>vence a los 7 días</strong>. El sistema avisa <strong>1 día antes</strong> y mientras siga vencida.</li>
+<li><strong>Registrar pago</strong>: importe (viene cargado el saldo total; botones &quot;Todo el saldo&quot; y &quot;La mitad&quot;), efectivo o transferencia y una nota. Los pagos se descuentan de la deuda más vieja.</li>
+<li><strong>WhatsApp</strong>: arma el mensaje con el nombre, el saldo y el vencimiento y abre el chat del cliente. El texto se cambia en Configuración.</li>
+<li>Tocando el nombre se abre la <strong>ficha</strong>: datos, saldo, estado y todos los movimientos con el saldo acumulado.</li>
+<li><strong>Nuevo cliente</strong> y <strong>Editar datos</strong>: nombre, teléfono (con código de área, para WhatsApp), dirección, zona, CUIT y notas. Un cliente se desactiva, nunca se borra.</li>
+<li><strong>Ajuste de saldo</strong> (Lorenzo y Thiago): para corregir un error o cargar una deuda vieja, siempre con motivo.</li>
+</ul>
+<hr>
+<h2>5. Productos y stock</h2>
+<p>Menú <strong>Productos y stock</strong>. Buscador por nombre, código o marca; filtros por categoría, proveedor y estado; &quot;Solo con avisos&quot; muestra los que están en el mínimo o con precio bajo costo.</p>
+<p>En la tabla se puede editar directo (Lorenzo y Thiago):</p>
+<ul>
+<li><strong>Mínimo</strong>: cuando el stock llega a ese número, el sistema avisa.</li>
+<li><strong>Costo</strong> por bulto; debajo se ve el costo por unidad.</li>
+<li><strong>% ganancia</strong>: el precio se calcula solo sobre el costo y se redondea a $10 <strong>para arriba</strong>.</li>
+<li><strong>Precio</strong>: si escribís un precio, queda &quot;a mano&quot; y deja de calcularse. Si queda por debajo del costo, aparece el aviso &quot;Bajo costo&quot;.</li>
+</ul>
+<p>Botones:</p>
+<ul>
+<li><strong>Nuevo producto</strong>: nombre, categoría, marca, proveedor, se vende por (unidad, pack, caja o cajón) y cuántas unidades trae, código, mínimo, costo y precio.</li>
+<li><strong>Stock</strong> (en cada fila): ajuste manual. &quot;Sale stock&quot; por rotura, vencido o conteo; &quot;Entra stock&quot; por un conteo. Siempre con motivo; queda en el historial.</li>
+<li><strong>Movimientos</strong>: todas las entradas y salidas de mercadería, con quién las hizo.</li>
+<li><strong>Aumentar precios</strong>: sube o baja un porcentaje a una categoría, un proveedor o todos los productos.</li>
+<li><strong>Categorías, marcas y proveedores</strong>: altas, ediciones y bajas de esas listas.</li>
+<li><strong>Editar</strong> abre la ficha completa, con las pestañas Stock y lotes e Historial de precios.</li>
+</ul>
+<p>El stock <strong>nunca se escribe a mano</strong>: cambia por compras, ventas, anulaciones y ajustes.</p>
+<hr>
+<h2>6. Compras</h2>
+<p>Menú <strong>Compras</strong>. Para cargar la mercadería que llega.</p>
+<ol>
+<li>Elegí el proveedor (botón <strong>Nuevo</strong> si no está) y la fecha.</li>
+<li>Por cada producto: cantidad en packs, cajas o cajones, <strong>costo por unidad</strong> (botella o lata) y vencimiento si lo tiene. El sistema muestra el costo del bulto y el subtotal.</li>
+<li><strong>Agregar</strong> cada renglón y al final <strong>Ingresar stock</strong>.</li>
+</ol>
+<p>Al ingresar, el stock sube, el costo del producto pasa a ser el último costo de compra y el precio de venta se recalcula solo (si es con porcentaje). Cada ingreso queda como un lote con su vencimiento; al vender sale primero lo que vence antes.</p>
+<p>Una compra no se borra. Si hubo un error, se corrige con un ajuste de stock y, si hace falta, el costo del producto.</p>
+<hr>
+<h2>7. Gastos</h2>
+<p>Menú <strong>Gastos</strong> (Lorenzo y Thiago). Fecha, monto, categoría, medio de pago, a quién se le pagó y detalle. Las categorías se agregan o desactivan con el botón <strong>Categorías</strong>. Un gasto no se edita: se anula con motivo y se carga de nuevo. Todo gasto entra en el balance.</p>
+<hr>
+<h2>8. Informes</h2>
+<p>Menú <strong>Informes</strong> (solo Lorenzo). Balance del período elegido: ventas, costo de lo vendido, ganancia bruta, gastos y resultado. Atajos para hoy, 7 días, este mes, mes anterior, 30 días y este año; o rango a mano. Vista por día o por mes. Las ventas anuladas y los gastos anulados no cuentan.</p>
+<hr>
+<h2>9. Usuarios y configuración</h2>
+<p>Menú <strong>Usuarios</strong> (solo Lorenzo): cambiar el rol de una persona o desactivar su acceso, y ver los últimos movimientos (quién hizo qué). Los usuarios nuevos los da de alta NEXUSS.</p>
+<p>Menú <strong>Configuración</strong> (solo Lorenzo):</p>
+<ul>
+<li>Datos del comprobante y si se muestran además del logo.</li>
+<li>Vencimiento de la cuenta corriente (7 días) y aviso previo (1 día).</li>
+<li>Aviso de productos por vencer (15 días).</li>
+<li>Texto del mensaje de WhatsApp, con {cliente}, {saldo} y {vencimiento}.</li>
+<li>Redondeo del precio calculado.</li>
+</ul>
+<p>Menú <strong>Importar datos</strong> (solo Lorenzo): carga inicial desde la planilla Excel. Ver la sección siguiente.</p>
+<hr>
+<h2>10. Carga inicial desde Excel</h2>
+<ol>
+<li>En <strong>Importar datos</strong>, descargá la plantilla. Tiene tres hojas: Productos, Clientes y Proveedores, con filas de ejemplo que se borran o se pisan.</li>
+<li>Completá los datos sin cambiar los títulos de las columnas. Precios y costos en pesos enteros. &quot;Unidad de venta&quot;: unidad, pack, caja o cajon. &quot;Stock actual&quot; en packs, cajas o cajones. En Clientes, &quot;Saldo que debe&quot; y &quot;Debe desde&quot; (día/mes/año).</li>
+<li>Elegí el archivo. El sistema muestra una vista previa y marca las filas con errores: corregilas en el Excel y volvé a elegirlo.</li>
+<li><strong>Importar</strong>. Primero proveedores, después productos y por último clientes. Al final muestra cuántos se crearon, cuántos se actualizaron y si alguno falló.</li>
+</ol>
+<p>Se puede volver a importar la misma planilla: lo que ya existe se actualiza; el stock y el saldo inicial se cargan una sola vez.</p>
+<hr>
+<h2>11. Preguntas frecuentes</h2>
+<p><strong>Vendí mal, ¿qué hago?</strong> Anulá la venta con el motivo y hacela de nuevo.</p>
+<p><strong>Cargué una compra con el costo equivocado.</strong> Corregí el costo en Productos y, si la cantidad estaba mal, hacé un ajuste de stock.</p>
+<p><strong>Un cliente me pagó por transferencia parte de la deuda.</strong> Cuentas corrientes → Registrar pago → importe, &quot;Transferencia&quot;, nota.</p>
+<p><strong>El precio me dio raro.</strong> Revisá el costo y el % de ganancia del producto. El precio se redondea a $10 para arriba. Si querés un precio exacto, escribilo en la columna Precio (queda a mano).</p>
+<p><strong>Un producto dejó de venderse.</strong> Editalo y destildá &quot;Producto activo&quot;. No se borra: conserva su historial.</p>
+<p><strong>¿Se pierden los datos si se corta la luz o internet?</strong> No. Todo se guarda en el servidor en el momento; nada queda solo en la computadora. Lo que no se llegó a confirmar, no se guardó.</p>
+<p><strong>¿Quién hizo tal cosa?</strong> Usuarios → Últimos movimientos (Lorenzo), o el historial de movimientos de stock y de cuenta corriente, que siempre muestran el usuario.</p>
+
+</main>
+</body>
+</html>
