@@ -87,6 +87,7 @@ En la tabla se puede editar directo (Lorenzo y Thiago):
 Botones:
 
 - **Nuevo producto**: nombre, categoría, marca, proveedor, se vende por (unidad, pack, caja o cajón) y cuántas unidades trae, código, mínimo, costo y precio.
+- **Ojo** (en cada fila): desactiva el producto. Deja de aparecer en Ventas y Compras pero no se borra; sirve para lo que se vende por temporada, como el carbón. Se vuelve a activar desde el filtro Estado > Desactivados, con el mismo botón.
 - **Stock** (en cada fila): ajuste manual. "Sale stock" por rotura, vencido o conteo; "Entra stock" por un conteo. Siempre con motivo; queda en el historial.
 - **Movimientos**: todas las entradas y salidas de mercadería, con quién las hizo.
 - **Aumentar precios**: sube o baja un porcentaje a una categoría, un proveedor o todos los productos.
@@ -160,7 +161,7 @@ Se puede volver a importar la misma planilla: lo que ya existe se actualiza; el 
 
 **El precio me dio raro.** Revisá el costo y el % de ganancia del producto. El precio se redondea a $10 para arriba. Si querés un precio exacto, escribilo en la columna Precio (queda a mano).
 
-**Un producto dejó de venderse.** Editalo y destildá "Producto activo". No se borra: conserva su historial.
+**Un producto dejó de venderse o es de temporada.** Tocá el ojo en su fila para desactivarlo. No se borra: conserva su historial y se vuelve a activar cuando haga falta.
 
 **¿Se pierden los datos si se corta la luz o internet?** No. Todo se guarda en el servidor en el momento; nada queda solo en la computadora. Lo que no se llegó a confirmar, no se guardó.
 

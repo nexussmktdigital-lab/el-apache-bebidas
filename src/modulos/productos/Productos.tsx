@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Plus, Search, TrendingUp, ListTree, Pencil, History, PackagePlus } from 'lucide-react'
+import { Plus, Search, TrendingUp, ListTree, Pencil, History, PackagePlus, EyeOff, Eye } from 'lucide-react'
 import { AjusteStock } from '@/modulos/stock/AjusteStock'
 import { diasHasta, fecha } from '@/lib/formato'
 import { usePerfil } from '@/app/AuthProvider'
@@ -240,6 +240,21 @@ function Fila({
   const editarProducto = useEditarProducto()
   const editarCostos = useEditarCostos()
 
+  const cambiarActivo = () => {
+    const activo = !p.activo
+    editarProducto.mutate(
+      { id: p.id, cambios: { activo } },
+      {
+        onSuccess: () =>
+          avisar(
+            activo
+              ? `${p.nombre} vuelve a aparecer en Ventas`
+              : `${p.nombre} ya no aparece en Ventas. Lo encontrás en el filtro Desactivados`,
+          ),
+        onError: (e) => avisar(mensajeError(e), 'mal'),
+      },
+    )
+  }
   const guardarMinimo = (v: string) => {
     const n = Number.parseInt(v, 10)
     if (!Number.isFinite(n) || n < 0 || n === p.stock_minimo) return
@@ -336,14 +351,28 @@ function Fila({
       </td>
       {edita && (
         <td className="text-right whitespace-nowrap">
-          {onAjustar && (
-            <Boton chico variante="fantasma" onClick={onAjustar} aria-label={`Ajustar stock de ${p.nombre}`} title="Ajustar stock">
-              <PackagePlus size={14} /> Stock
+          <div className="flex flex-col items-end gap-1">
+            <Boton chico onClick={onEditar} aria-label={`Editar ${p.nombre}`}>
+              <Pencil size={14} /> Editar
             </Boton>
-          )}{' '}
-          <Boton chico onClick={onEditar} aria-label={`Editar ${p.nombre}`}>
-            <Pencil size={14} /> Editar
-          </Boton>
+            <div className="flex gap-1">
+              {onAjustar && (
+                <Boton chico variante="fantasma" onClick={onAjustar} aria-label={`Ajustar stock de ${p.nombre}`} title="Ajustar stock">
+                  <PackagePlus size={14} /> Stock
+                </Boton>
+              )}
+              <Boton
+                chico
+                variante="fantasma"
+                onClick={cambiarActivo}
+                disabled={editarProducto.isPending}
+                aria-label={`${p.activo ? 'Desactivar' : 'Activar'} ${p.nombre}`}
+                title={p.activo ? 'Desactivar: ocultar de Ventas y Compras sin borrarlo' : 'Activar: volver a mostrar en Ventas y Compras'}
+              >
+                {p.activo ? <EyeOff size={15} /> : <Eye size={15} />}
+              </Boton>
+            </div>
+          </div>
         </td>
       )}
     </tr>
