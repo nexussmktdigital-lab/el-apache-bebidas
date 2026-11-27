@@ -12,7 +12,7 @@ Por decisión de NEXUSS se usó el proyecto que ya existía (`pkkasaypdkjwmsayli
 4. Migración `alta_solo_por_admin`: el rol de un usuario nuevo solo lo puede poner el servidor. Una cuenta creada por otro camino queda desactivada.
 5. La dirección pública no cambió: ya apuntaba a este proyecto.
 
-**Pendiente en el panel de Supabase**: Authentication > Sign In / Providers > desactivar "Allow new users to sign up". La base ya está protegida (una cuenta registrada sola queda desactivada), pero conviene cerrar también la puerta.
+**Registro público desactivado** el 27/11/2026 en Authentication > Sign In / Providers ("Allow new users to sign up" apagado y guardado). Además, la base deja desactivada cualquier cuenta que no haya creado el servidor.
 
 **Desde ahora no hay base de desarrollo en línea.** Los cambios se prueban con las pruebas automáticas (Postgres embebido), se hace una copia antes y se aplican con `npm run db:push`. Si más adelante hace falta probar contra Supabase, crear un proyecto de pruebas aparte y cargarle `supabase/seed.sql`.
 
