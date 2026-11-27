@@ -37,7 +37,7 @@ Reemplazar `src/recursos/logo.webp` y `referencia/logo.webp` por el logo origina
 
 ## 7. Entrega
 
-- Manual impreso: `docs/Manual-de-uso-El-Apache-Bebidas.pdf`, 8 páginas A4 para imprimir en doble faz (2 hojas por copia si se imprime a 2 páginas por cara, 4 hojas si no). Se genera desde `docs/manual-impreso/manual-impreso.html` con Chrome: abrirlo, Ctrl+P, Guardar como PDF, márgenes Ninguno y "Gráficos de fondo" activado.
+- Manual impreso: `docs/Manual-de-uso-El-Apache-Bebidas.pdf`, 8 páginas A4 en doble faz: 4 hojas por copia. Se genera desde `docs/manual-impreso/manual-impreso.html` con Chrome: abrirlo, Ctrl+P, Guardar como PDF, márgenes Ninguno y "Gráficos de fondo" activado.
 - Manual en pantalla: `docs/manual-de-uso.html` y `docs/manual-de-uso.md`.
 - Capacitación con los tres usuarios sobre la dirección pública, cada uno con su acceso.
 - Primera semana: revisar a diario Usuarios > Últimos movimientos y los avisos del Inicio.
