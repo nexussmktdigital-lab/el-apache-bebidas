@@ -2,7 +2,7 @@
 
 Sucursal Alta Córdoba · Reparto. Versión 1, noviembre de 2026. Desarrollado por NEXUSS Agencia Digital.
 
-Este manual explica cómo usar el sistema en el trabajo de todos los días. Está pensado para leerse en diez minutos y tenerlo a mano. Si algo no funciona como dice acá, escribile a NEXUSS.
+Este manual explica cómo usar el sistema en el trabajo de todos los días. Está pensado para leerse en diez minutos y tenerlo a mano. Si algo no funciona como dice acá, escribile a NEXUSS por WhatsApp al 3574 432907.
 
 ---
 
@@ -10,7 +10,7 @@ Este manual explica cómo usar el sistema en el trabajo de todos los días. Est�
 
 - Dirección: **https://el-apache-bebidas.nexuss-mktdigital.workers.dev** (se puede agregar a la pantalla de inicio del celular como si fuera una aplicación).
 - Cada persona entra con su **email y contraseña**. No se comparten usuarios: el sistema registra quién hizo cada cosa.
-- Si te olvidás la contraseña, pedile a Lorenzo que te la cambie.
+- Si te olvidás la contraseña, avisale a Lorenzo: él le pide una nueva a NEXUSS.
 - Para salir, tocá el ícono de salida abajo a la izquierda (en el celular, dentro del menú "Más").
 
 ### Quién puede hacer qué

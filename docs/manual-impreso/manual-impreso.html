@@ -151,6 +151,9 @@
   .soporte { margin-top: 3mm; border-radius: 5mm; background: linear-gradient(135deg, var(--azul) 0%, var(--azul-oscuro) 100%); color: #fff; padding: 7mm 8mm; display: flex; gap: 6mm; align-items: center; }
   .soporte h3 { color: #fff; font-size: 13pt; margin-bottom: 1.4mm; }
   .soporte p { color: rgba(255,255,255,.88); margin: 0 0 1mm; }
+  .soporte .wa-num { display: inline-flex; align-items: center; gap: 1.6mm; margin-top: 2.4mm; background: #fff; color: var(--azul-oscuro);
+    border-radius: 99px; padding: 1mm 3.4mm; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 11pt; white-space: nowrap; }
+  .soporte .wa-num svg { width: 4mm; height: 4mm; color: var(--whatsapp); }
   .soporte.abajo { position: absolute; left: 17mm; right: 17mm; bottom: 26mm; margin: 0; }
   .soporte .nx { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 20pt; white-space: nowrap; }
   /* vista de una sola página (manual-impreso.html#p3), para revisar */
@@ -207,6 +210,8 @@
         <li>En el celular, desde el menú del navegador elegí <b>“Agregar a pantalla de inicio”</b> y queda como una aplicación más.</li>
       </ol>
       <p class="chico">Para salir, tocá el ícono de salida abajo a la izquierda. En el celular está dentro del menú <b>Más</b>. Si te olvidás la contraseña, avisale a Lorenzo: él le pide una nueva a NEXUSS.</p>
+      <!-- mismo texto que la pantalla de ingreso -->
+
     </div>
     <div class="tarjeta gris">
       <h3>Cuatro reglas del sistema</h3>
@@ -505,10 +510,14 @@
   <div class="soporte abajo">
     <div style="flex:1">
       <h3>¿Algo no funciona como dice acá?</h3>
-      <p>Escribile a NEXUSS contando qué pantalla estabas usando, qué tocaste y qué apareció. Si podés, mandá una foto o captura de la pantalla.</p>
+      <p>Escribile a NEXUSS por WhatsApp contando qué pantalla estabas usando, qué tocaste y qué apareció. Si podés, mandá una foto o captura de la pantalla.</p>
       <p>Las mejoras y los cambios del sistema se coordinan con Lorenzo.</p>
     </div>
-    <div style="text-align:right"><div class="nx">NEXUSS<i>.</i></div><div style="font-size:8.6pt;opacity:.85">Agencia Digital<br>nexuss.com.ar</div></div>
+    <div style="text-align:right">
+      <div class="nx">NEXUSS<i>.</i></div>
+      <div style="font-size:8.6pt;opacity:.85">Agencia Digital · nexuss.com.ar</div>
+      <div class="wa-num"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>WhatsApp 3574 432907</div>
+    </div>
   </div>
 
   <div class="pie"><div class="marca">Desarrollado por <b>NEXUSS</b> Agencia Digital · nexuss.com.ar</div><div class="num">8</div></div>
