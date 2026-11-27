@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual de uso · El Apache Bebidas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul: #1f5ac8; --azul-oscuro: #103a8b; --azul-tinte: #eef3ff;
+    --amarillo: #f5b301; --amarillo-tinte: #fff6d6; --amarillo-texto: #9a6b00;
+    --fondo: #f5f7fb; --borde: #e7eaf0; --tinta: #16161d; --tinta-2: #4b5565; --tinta-3: #667085; --mudo: #9aa3b2;
+    --ok: #1e8e5a; --ok-tinte: #e6f5ec; --aviso: #b7791f; --aviso-tinte: #fff4dc; --mal: #c0392b; --mal-tinte: #fdecea;
+    --whatsapp: #1fa855;
+  }
+  * { box-sizing: border-box; }
+  @page { size: A4; margin: 0; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', system-ui, 'Segoe UI', Arial, sans-serif;
+    color: var(--tinta); font-size: 9.6pt; line-height: 1.45;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    background: #d9dde5;
+  }
+  h1, h2, h3 { font-family: 'Outfit', 'DM Sans', system-ui, sans-serif; letter-spacing: -0.01em; }
+  p { margin: 0 0 2.2mm; }
+  ul, ol { margin: 0 0 2.2mm; padding-left: 4.6mm; }
+  li { margin-bottom: 1mm; }
+  b, strong { font-weight: 600; }
+
+  /* ---------- hoja A4 ---------- */
+  .hoja {
+    width: 210mm; height: 297mm; position: relative; overflow: hidden;
+    background: #fff; padding: 15mm 17mm 22mm;
+    margin: 8mm auto; box-shadow: 0 2px 12px rgba(16,24,40,.18);
+    break-after: page; page-break-after: always;
+  }
+  @media print {
+    body { background: #fff; }
+    .hoja { margin: 0; box-shadow: none; }
+    .hoja:last-child { break-after: auto; page-break-after: auto; }
+  }
+
+  /* cabecera de las páginas interiores */
+  .cabecera { display: flex; align-items: center; gap: 3mm; padding-bottom: 3mm; margin-bottom: 6mm; border-bottom: 1px solid var(--borde); }
+  .cabecera img { height: 8.5mm; }
+  .cabecera .doc { font-size: 8pt; color: var(--tinta-3); line-height: 1.2; }
+  .cabecera .doc b { display: block; color: var(--azul-oscuro); font-family: 'Outfit', sans-serif; font-size: 9.5pt; font-weight: 600; }
+  .cabecera .seccion { margin-left: auto; font-size: 8pt; font-weight: 600; color: var(--azul); text-transform: uppercase; letter-spacing: .08em; }
+  .par .cabecera { flex-direction: row-reverse; }
+  .par .cabecera .seccion { margin-left: 0; margin-right: auto; }
+  .par .cabecera .doc { text-align: right; }
+
+  /* pie: número del lado de afuera para doble faz */
+  .pie {
+    position: absolute; left: 17mm; right: 17mm; bottom: 10mm;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--borde); padding-top: 2.5mm;
+    font-size: 7.8pt; color: var(--tinta-3);
+  }
+  .pie .marca b { color: var(--azul-oscuro); letter-spacing: .04em; }
+  .pie .num { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 10pt; color: var(--azul); min-width: 7mm; text-align: center;
+    background: var(--azul-tinte); border-radius: 6px; padding: .6mm 1.6mm; }
+  .par .pie { flex-direction: row-reverse; }
+
+  /* títulos */
+  h2 { font-size: 19pt; color: var(--azul-oscuro); margin: 0 0 1.2mm; font-weight: 600; }
+  .bajada { color: var(--tinta-2); font-size: 10pt; margin-bottom: 5mm; }
+  .bajada::after { content: ''; display: block; width: 16mm; height: 1.2mm; border-radius: 1mm; background: var(--amarillo); margin-top: 2.6mm; }
+  h3 { font-size: 11.5pt; color: var(--tinta); margin: 0 0 1.8mm; font-weight: 600; display: flex; align-items: center; gap: 2mm; flex-wrap: wrap; }
+  h3 .menu { font-family: 'DM Sans', sans-serif; font-size: 7.6pt; font-weight: 600; color: var(--azul); background: var(--azul-tinte); border-radius: 99px; padding: .5mm 2.2mm; letter-spacing: 0; }
+
+  /* bloques */
+  .tarjeta { border: 1px solid var(--borde); border-radius: 4mm; padding: 4mm 4.5mm 2.4mm; margin-bottom: 4mm; background: #fff; }
+  .tarjeta.gris { background: var(--fondo); }
+  .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .dos > .tarjeta { margin-bottom: 0; }
+  .fila { margin-bottom: 4mm; }
+  .chico { font-size: 8.8pt; color: var(--tinta-2); }
+
+  .consejo { background: var(--amarillo-tinte); border-left: 1.2mm solid var(--amarillo); border-radius: 0 3mm 3mm 0; padding: 2.6mm 3.6mm 1mm; margin-bottom: 4mm; font-size: 9.2pt; }
+  .consejo b:first-child { color: var(--amarillo-texto); }
+  .nota { background: var(--azul-tinte); border-radius: 3mm; padding: 2.6mm 3.6mm 1mm; margin-bottom: 2mm; font-size: 9.2pt; }
+
+  /* pasos numerados */
+  .pasos { list-style: none; padding: 0; margin: 0 0 2mm; counter-reset: paso; }
+  .pasos li { counter-increment: paso; position: relative; padding-left: 8.5mm; margin-bottom: 2.4mm; min-height: 6mm; }
+  .pasos li::before { content: counter(paso); position: absolute; left: 0; top: -.2mm; width: 5.6mm; height: 5.6mm; border-radius: 50%;
+    background: var(--azul); color: #fff; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 8.6pt; display: flex; align-items: center; justify-content: center; }
+
+  /* imitación de los controles del sistema */
+  .btn { display: inline-flex; align-items: center; gap: 1.2mm; border-radius: 2mm; padding: .2mm 2.2mm; font-size: 8.4pt; font-weight: 500; white-space: nowrap;
+    border: 1px solid var(--borde); background: #fff; color: var(--tinta); vertical-align: baseline; line-height: 1.5; }
+  .btn.pri { background: var(--azul); border-color: var(--azul); color: #fff; }
+  .btn.wa { background: var(--whatsapp); border-color: var(--whatsapp); color: #fff; }
+  .btn.fan { border-color: transparent; background: var(--fondo); color: var(--tinta-2); }
+  .btn svg { width: 3.2mm; height: 3.2mm; }
+  .ins { display: inline-block; border-radius: 99px; padding: 0 2mm; font-size: 7.8pt; font-weight: 600; white-space: nowrap; line-height: 1.6; }
+  .ins.ok { background: var(--ok-tinte); color: var(--ok); }
+  .ins.mal { background: var(--mal-tinte); color: var(--mal); }
+  .ins.aviso { background: var(--aviso-tinte); color: var(--aviso); }
+  .ins.neutro { background: var(--fondo); color: var(--tinta-2); border: 1px solid var(--borde); }
+  .campo { display: inline-block; border: 1px solid var(--borde); border-radius: 1.6mm; padding: 0 2mm; font-size: 8.4pt; background: #fff; color: var(--tinta-2); line-height: 1.6; white-space: nowrap; }
+
+  /* indicadores como los del Inicio */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.6mm; margin-bottom: 3mm; }
+  .kpi { border: 1px solid var(--borde); border-radius: 3mm; padding: 2.4mm 3mm; }
+  .kpi small { display: block; font-size: 7.6pt; color: var(--tinta-3); }
+  .kpi span { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 10.5pt; }
+
+  /* tablas */
+  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 8.8pt; border: 1px solid var(--borde); border-radius: 3mm; overflow: hidden; margin-bottom: 4mm; }
+  th, td { padding: 1.6mm 2.6mm; border-bottom: 1px solid var(--borde); text-align: left; vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  th { background: var(--azul-tinte); color: var(--azul-oscuro); font-weight: 600; font-size: 8.2pt; }
+  td.c, th.c { text-align: center; }
+  .si { color: var(--ok); font-weight: 700; }
+  .no { color: var(--mudo); }
+  .parcial { color: var(--aviso); font-weight: 600; font-size: 8pt; }
+
+  /* índice */
+  .indice { list-style: none; padding: 0; margin: 0; columns: 2; column-gap: 8mm; }
+  .indice li { display: flex; gap: 2mm; align-items: baseline; break-inside: avoid; }
+  .indice li::after { content: ''; order: 2; flex: 1; border-bottom: 1px dotted var(--mudo); transform: translateY(-1mm); }
+  .indice li span { order: 3; font-weight: 600; color: var(--azul); }
+
+  /* preguntas */
+  .faq { margin-bottom: 3.6mm; break-inside: avoid; }
+  .faq b { display: block; color: var(--azul-oscuro); margin-bottom: .6mm; }
+
+  /* ---------- portada ---------- */
+  .portada { padding: 0; display: flex; flex-direction: column; }
+  .portada .arriba { padding: 30mm 22mm 0; text-align: center; }
+  .portada .arriba img { width: 92mm; }
+  .portada .sucursal { margin-top: 5mm; font-size: 10.5pt; color: var(--tinta-3); letter-spacing: .02em; }
+  .portada .bloque { margin: 22mm 17mm 0; border-radius: 7mm; background: linear-gradient(135deg, var(--azul) 0%, var(--azul-oscuro) 100%); color: #fff; padding: 16mm 15mm 15mm; position: relative; overflow: hidden; }
+  .portada .bloque::after { content: ''; position: absolute; right: -18mm; top: -18mm; width: 62mm; height: 62mm; border-radius: 50%; background: rgba(255,255,255,.07); }
+  .portada .bloque .etiqueta { display: inline-block; background: var(--amarillo); color: var(--azul-oscuro); font-weight: 700; font-size: 8.5pt; border-radius: 99px; padding: .8mm 3.4mm; letter-spacing: .06em; text-transform: uppercase; }
+  .portada .bloque h1 { font-size: 40pt; line-height: 1; margin: 6mm 0 3mm; font-weight: 700; }
+  .portada .bloque p { font-size: 12pt; color: rgba(255,255,255,.86); margin: 0; max-width: 125mm; }
+  .portada .datos { margin: 9mm 17mm 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .portada .datos div { border: 1px solid var(--borde); border-radius: 4mm; padding: 3.4mm 4mm; font-size: 8.4pt; color: var(--tinta-3); }
+  .portada .datos b { display: block; font-family: 'Outfit', sans-serif; font-size: 10.5pt; color: var(--tinta); font-weight: 600; margin-top: .6mm; }
+  .portada .firma { margin-top: auto; padding: 0 17mm 14mm; display: flex; justify-content: space-between; align-items: flex-end; font-size: 8.4pt; color: var(--tinta-3); }
+  .portada .firma .nx { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15pt; color: var(--azul-oscuro); letter-spacing: .02em; }
+  .nx i { color: var(--amarillo); font-style: normal; }
+
+  /* soporte */
+  .soporte { margin-top: 3mm; border-radius: 5mm; background: linear-gradient(135deg, var(--azul) 0%, var(--azul-oscuro) 100%); color: #fff; padding: 7mm 8mm; display: flex; gap: 6mm; align-items: center; }
+  .soporte h3 { color: #fff; font-size: 13pt; margin-bottom: 1.4mm; }
+  .soporte p { color: rgba(255,255,255,.88); margin: 0 0 1mm; }
+  .soporte.abajo { position: absolute; left: 17mm; right: 17mm; bottom: 26mm; margin: 0; }
+  .soporte .nx { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 20pt; white-space: nowrap; }
+  /* vista de una sola página (manual-impreso.html#p3), para revisar */
+  .solo body { background: #fff; }
+  .solo .hoja { margin: 0; box-shadow: none; }
+  .solo .hoja:not(.ver) { display: none; }
+</style>
+</head>
+<body>
+<script>
+  addEventListener('DOMContentLoaded', () => {
+    const m = location.hash.match(/^#p(\d+)$/)
+    if (!m) return
+    document.documentElement.classList.add('solo')
+    document.querySelectorAll('.hoja')[Number(m[1]) - 1]?.classList.add('ver')
+  })
+</script>
+
+<!-- ===================== 1 · PORTADA ===================== -->
+<section class="hoja portada">
+  <div class="arriba">
+    <img src="logo.webp" alt="El Apache Bebidas">
+    <div class="sucursal">Sucursal Alta Córdoba · Reparto</div>
+  </div>
+  <div class="bloque">
+    <span class="etiqueta">Sistema de gestión</span>
+    <h1>Manual de uso</h1>
+    <p>Cómo vender, cobrar, cargar mercadería y llevar las cuentas del negocio, paso a paso.</p>
+  </div>
+  <div class="datos">
+    <div>Para<b>Lorenzo, Thiago y Patricia</b></div>
+    <div>Versión<b>1 · Diciembre 2026</b></div>
+    <div>Se usa desde<b>Computadora y celular</b></div>
+  </div>
+  <div class="firma">
+    <div>Este manual describe el sistema<br>tal como se entrega para empezar a usarlo.</div>
+    <div style="text-align:right">Desarrollado por<br><span class="nx">NEXUSS<i>.</i></span><br>Agencia Digital</div>
+  </div>
+</section>
+
+<!-- ===================== 2 · ANTES DE EMPEZAR ===================== -->
+<section class="hoja par">
+  <div class="cabecera"><img src="logo.webp" alt=""><div class="doc"><b>Manual de uso</b>Sistema de gestión</div><div class="seccion">Antes de empezar</div></div>
+
+  <h2>Antes de empezar</h2>
+  <div class="bajada">Lo que conviene saber el primer día.</div>
+
+  <div class="dos fila">
+    <div class="tarjeta">
+      <h3>Entrar al sistema</h3>
+      <ol class="pasos">
+        <li>Abrí en la computadora o el celular:<br><b style="color:var(--azul);white-space:nowrap">el-apache-bebidas</b><br><b style="color:var(--azul);white-space:nowrap">.nexuss-mktdigital.workers.dev</b></li>
+        <li>Escribí tu <b>email</b> y tu <b>contraseña</b> y tocá <span class="btn pri">Entrar</span>.</li>
+        <li>En el celular, desde el menú del navegador elegí <b>“Agregar a pantalla de inicio”</b> y queda como una aplicación más.</li>
+      </ol>
+      <p class="chico">Para salir, tocá el ícono de salida abajo a la izquierda. En el celular está dentro del menú <b>Más</b>. Si te olvidás la contraseña, avisale a Lorenzo: él le pide una nueva a NEXUSS.</p>
+    </div>
+    <div class="tarjeta gris">
+      <h3>Cuatro reglas del sistema</h3>
+      <ol class="pasos">
+        <li><b>Cada uno con su usuario.</b> El sistema anota quién hizo cada cosa y cuándo.</li>
+        <li><b>Nada se borra.</b> Lo que está mal se anula o se desactiva, siempre con un motivo.</li>
+        <li><b>El stock no se escribe a mano.</b> Sube con las compras, baja con las ventas y se corrige con un ajuste.</li>
+        <li><b>Lo confirmado queda guardado</b> en el servidor, aunque se corte la luz o internet.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Quién puede hacer qué</h3>
+  <table>
+    <tr><th></th><th class="c">Lorenzo</th><th class="c">Thiago</th><th class="c">Patricia</th></tr>
+    <tr><td>Vender y emitir comprobantes</td><td class="c si">✓</td><td class="c si">✓</td><td class="c si">✓</td></tr>
+    <tr><td>Cobrar cuentas corrientes y avisar por WhatsApp</td><td class="c si">✓</td><td class="c si">✓</td><td class="c si">✓</td></tr>
+    <tr><td>Ver precios de venta y stock</td><td class="c si">✓</td><td class="c si">✓</td><td class="c si">✓</td></tr>
+    <tr><td>Cargar y editar productos, cambiar precios</td><td class="c si">✓</td><td class="c si">✓</td><td class="c no">—</td></tr>
+    <tr><td>Ver costos</td><td class="c si">✓</td><td class="c si">✓</td><td class="c no">—</td></tr>
+    <tr><td>Compras, ajustes de stock y gastos</td><td class="c si">✓</td><td class="c si">✓</td><td class="c no">—</td></tr>
+    <tr><td>Anular ventas</td><td class="c si">✓</td><td class="c parcial">Solo del día</td><td class="c no">—</td></tr>
+    <tr><td>Ver ganancias e informes</td><td class="c si">✓</td><td class="c no">—</td><td class="c no">—</td></tr>
+    <tr><td>Usuarios, configuración e importación</td><td class="c si">✓</td><td class="c no">—</td><td class="c no">—</td></tr>
+  </table>
+
+  <div class="tarjeta gris">
+    <h3>Contenido</h3>
+    <ul class="indice">
+      <li>Inicio y ventas <span>3</span></li>
+      <li>Cuentas corrientes <span>4</span></li>
+      <li>Productos y stock <span>5</span></li>
+      <li>Compras y gastos <span>6</span></li>
+      <li>Informes y administración <span>7</span></li>
+      <li>Preguntas frecuentes <span>8</span></li>
+    </ul>
+  </div>
+
+  <div class="pie"><div class="marca">Desarrollado por <b>NEXUSS</b> Agencia Digital · nexuss.com.ar</div><div class="num">2</div></div>
+</section>
+
+<!-- ===================== 3 · INICIO Y VENTAS ===================== -->
+<section class="hoja">
+  <div class="cabecera"><img src="logo.webp" alt=""><div class="doc"><b>Manual de uso</b>Sistema de gestión</div><div class="seccion">Inicio y ventas</div></div>
+
+  <h2>Inicio y ventas</h2>
+  <div class="bajada">El tablero del día y cómo hacer una venta de principio a fin.</div>
+
+  <div class="tarjeta">
+    <h3>Inicio <span class="menu">Menú Inicio</span></h3>
+    <p>Es lo primero que se ve al entrar. Arriba, el resumen de hoy:</p>
+    <div class="kpis">
+      <div class="kpi"><small>Ventas de hoy</small><span>$ 0</span></div>
+      <div class="kpi"><small>Ganancia · solo Lorenzo</small><span>$ 0</span></div>
+      <div class="kpi"><small>Valor del stock a costo</small><span>$ 0</span></div>
+      <div class="kpi"><small>Por cobrar</small><span>$ 0</span></div>
+    </div>
+    <p>Debajo están los <b>avisos</b>: productos en el <b>stock mínimo</b> (hay que reponer), <b>cuentas por vencer</b> o vencidas con su botón de WhatsApp, y <b>productos por vencer</b> en los próximos 15 días. Al final: ventas de los últimos 30 días, ventas por categoría y los más vendidos.</p>
+  </div>
+
+  <div class="tarjeta">
+    <h3>Hacer una venta <span class="menu">Menú Ventas y repartos</span></h3>
+    <ol class="pasos">
+      <li>En el buscador escribí parte del nombre o el código. Si aparece uno solo, <b>Enter</b> lo agrega; si hay varios, tocá el que va.</li>
+      <li>Ajustá la cantidad con <span class="btn">+</span> y <span class="btn">−</span> o escribiéndola. El sistema <b>no deja vender más de lo que hay</b> en stock.</li>
+      <li>Elegí el <b>cliente</b>, o dejá <span class="campo">Sin cliente</span> para una venta de mostrador. Si el cliente no existe, tocá <span class="btn">Nuevo</span> y cargalo ahí mismo.</li>
+      <li>Elegí la forma de pago: <span class="campo">Efectivo</span> <span class="campo">Transferencia</span> <span class="campo">Cuenta corriente</span>. La cuenta corriente siempre necesita un cliente.</li>
+      <li>Tocá <span class="btn pri">Confirmar venta</span>. En ese momento baja el stock y se abre el <b>comprobante</b> para imprimir o guardar como PDF.</li>
+    </ol>
+  </div>
+
+  <div class="dos fila">
+    <div class="tarjeta">
+      <h3>Ventas de hoy</h3>
+      <p>Debajo de la venta está la lista del día; también se pueden ver los últimos 7 o 30 días. Desde ahí se vuelve a abrir el <b>comprobante</b> de cualquier venta.</p>
+    </div>
+    <div class="tarjeta">
+      <h3>Anular una venta</h3>
+      <p>Solo si hubo un error o el cliente devolvió todo. Pide un <b>motivo</b>. El stock vuelve al depósito y, si era en cuenta corriente, se descuenta de la deuda. La venta no se borra: queda <span class="ins neutro">Anulada</span>.</p>
+    </div>
+  </div>
+
+  <div class="consejo"><b>Para tener en cuenta.</b> Thiago puede anular solo las ventas del mismo día; Lorenzo, cualquiera. Si una venta salió mal, lo más simple es anularla y hacerla de nuevo.</div>
+
+  <div class="pie"><div class="marca">Desarrollado por <b>NEXUSS</b> Agencia Digital · nexuss.com.ar</div><div class="num">3</div></div>
+</section>
+
+<!-- ===================== 4 · CUENTAS CORRIENTES ===================== -->
+<section class="hoja par">
+  <div class="cabecera"><img src="logo.webp" alt=""><div class="doc"><b>Manual de uso</b>Sistema de gestión</div><div class="seccion">Cuentas corrientes</div></div>
+
+  <h2>Cuentas corrientes</h2>
+  <div class="bajada">Quién debe, cuánto, desde cuándo y cómo cobrarlo.</div>
+
+  <div class="tarjeta">
+    <h3>La lista de clientes <span class="menu">Menú Cuentas corrientes</span></h3>
+    <p>Arriba se ve el <b>total por cobrar</b> y cuántas cuentas están vencidas o por vencer. La lista muestra primero las vencidas, después las que están por vencer y al final las que están al día:
+      <span class="ins mal">Vencida</span> <span class="ins aviso">Por vencer</span> <span class="ins ok">Al día</span></p>
+    <p>Cada venta en cuenta corriente <b>vence a los 7 días</b>. El sistema avisa <b>1 día antes</b> y mientras siga vencida. Tocando el nombre se abre la <b>ficha</b>: datos, saldo, estado y todos los movimientos con el saldo acumulado.</p>
+  </div>
+
+  <div class="dos fila">
+    <div class="tarjeta">
+      <h3>Registrar un pago</h3>
+      <ol class="pasos">
+        <li>Tocá <span class="btn pri">Registrar pago</span> en el cliente.</li>
+        <li>El importe viene con el saldo total. Usá <span class="btn">Todo el saldo</span> o <span class="btn">La mitad</span>, o escribí otro.</li>
+        <li>Elegí <span class="campo">Efectivo</span> o <span class="campo">Transferencia</span>, agregá una nota si hace falta y confirmá.</li>
+      </ol>
+      <p class="chico">Los pagos se descuentan siempre de la deuda más vieja.</p>
+    </div>
+    <div class="tarjeta">
+      <h3>Avisar por WhatsApp</h3>
+      <p>El botón <span class="btn wa">WhatsApp</span> abre el chat del cliente con el mensaje ya armado: nombre, saldo y vencimiento. Revisalo y envialo desde tu teléfono.</p>
+      <p>Para que funcione, el teléfono del cliente tiene que estar cargado <b>con código de área</b>, por ejemplo 351 555 1234.</p>
+      <p class="chico">El texto del mensaje se cambia en Configuración.</p>
+    </div>
+  </div>
+
+  <div class="dos fila">
+    <div class="tarjeta">
+      <h3>Clientes nuevos y datos</h3>
+      <p><span class="btn">Nuevo cliente</span> y <span class="btn">Editar datos</span>: nombre, teléfono, dirección, zona, CUIT y notas. También se puede crear un cliente desde la pantalla de ventas.</p>
+      <p>Un cliente que ya no compra se <b>desactiva</b>; nunca se borra, para no perder su historia.</p>
+    </div>
+    <div class="tarjeta">
+      <h3>Ajuste de saldo <span class="menu">Lorenzo y Thiago</span></h3>
+      <p>Sirve para <b>cargar una deuda vieja</b> de antes del sistema o corregir un error. Se elige si el cliente debe o si se le descuenta, el importe, la fecha de vencimiento y el motivo.</p>
+      <p class="chico">Las ventas y los pagos normales no van por acá.</p>
+    </div>
+  </div>
+
+  <div class="consejo"><b>Carga inicial.</b> Cada cliente que ya debía se carga con <b>Nuevo cliente</b> y después un <b>Ajuste de saldo</b> con lo que debe y su vencimiento. Si son muchos, conviene la planilla de Importar datos (página 7).</div>
+
+  <div class="pie"><div class="marca">Desarrollado por <b>NEXUSS</b> Agencia Digital · nexuss.com.ar</div><div class="num">4</div></div>
+</section>
+
+<!-- ===================== 5 · PRODUCTOS Y STOCK ===================== -->
+<section class="hoja">
+  <div class="cabecera"><img src="logo.webp" alt=""><div class="doc"><b>Manual de uso</b>Sistema de gestión</div><div class="seccion">Productos y stock</div></div>
+
+  <h2>Productos y stock</h2>
+  <div class="bajada">Precios, costos, mínimos y mercadería de temporada.</div>
+
+  <div class="tarjeta">
+    <h3>La lista de productos <span class="menu">Menú Productos y stock</span></h3>
+    <p>Buscador por nombre, código o marca, y filtros por categoría, proveedor y estado. La casilla <span class="campo">Solo con avisos</span> muestra los que necesitan atención:
+      <span class="ins ok">Bien</span> <span class="ins mal">Stock bajo</span> <span class="ins mal">Bajo costo</span> <span class="ins neutro">Precio a mano</span> <span class="ins neutro">Desactivado</span></p>
+    <p>Lorenzo y Thiago cambian estos datos <b>directamente en la tabla</b>; se guardan al salir del casillero o con Enter:</p>
+    <table style="margin-bottom:1.6mm">
+      <tr><td style="width:26mm"><b>Mínimo</b></td><td>Cuando el stock llega a ese número, el sistema avisa en el Inicio.</td></tr>
+      <tr><td><b>Costo</b></td><td>Por bulto (pack, caja o cajón). Debajo se ve el costo por unidad.</td></tr>
+      <tr><td><b>% ganancia</b></td><td>El precio se calcula solo sobre el costo y se redondea a $10 <b>para arriba</b>.</td></tr>
+      <tr><td><b>Precio</b></td><td>Si escribís un precio, queda <span class="ins neutro">Precio a mano</span> y deja de calcularse. Si queda debajo del costo, aparece <span class="ins mal">Bajo costo</span>.</td></tr>
+    </table>
+  </div>
+
+  <div class="tarjeta">
+    <h3>Los botones de cada fila</h3>
+    <table style="margin-bottom:1.6mm">
+      <tr><td style="width:26mm"><span class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>Editar</span></td><td>Abre la ficha completa, con las pestañas <b>Stock y lotes</b> e <b>Historial de precios</b>.</td></tr>
+      <tr><td><span class="btn fan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16h6"/><path d="M19 13v6"/><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/></svg>Stock</span></td><td>Ajuste manual, siempre con motivo. <b>Sale stock</b> por rotura, vencido o conteo; <b>entra stock</b> por un conteo. Queda en el historial.</td></tr>
+      <tr><td><span class="btn fan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg></span> El ojo</td><td><b>Desactiva</b> el producto: deja de aparecer en Ventas y en Compras, pero no se borra. Ideal para lo de temporada, como el carbón. Para volver a activarlo, en el filtro Estado elegí <span class="campo">Desactivados</span> y tocá el mismo botón.</td></tr>
+    </table>
+  </div>
+
+  <div class="dos">
+    <div class="tarjeta">
+      <h3>Nuevo producto</h3>
+      <p>Nombre, categoría, marca y proveedor; <b>se vende por</b> pack, caja o cajón y cuántas unidades trae; código, mínimo, costo y % de ganancia o precio.</p>
+      <p class="chico">El stock que ya hay se carga después, con el botón Stock: entra stock por conteo.</p>
+    </div>
+    <div class="tarjeta">
+      <h3>Arriba de la lista</h3>
+      <p><span class="btn">Aumentar precios</span> sube o baja un porcentaje a una categoría, un proveedor o a todos. <span class="btn">Movimientos</span> muestra cada entrada y salida con quién la hizo. <span class="btn">Categorías, marcas y proveedores</span> administra esas listas.</p>
+    </div>
+  </div>
+
+  <div class="pie"><div class="marca">Desarrollado por <b>NEXUSS</b> Agencia Digital · nexuss.com.ar</div><div class="num">5</div></div>
+</section>
+
+<!-- ===================== 6 · COMPRAS Y GASTOS ===================== -->
+<section class="hoja par">
+  <div class="cabecera"><img src="logo.webp" alt=""><div class="doc"><b>Manual de uso</b>Sistema de gestión</div><div class="seccion">Compras y gastos</div></div>
+
+  <h2>Compras y gastos</h2>
+  <div class="bajada">La mercadería que entra y la plata que sale.</div>
+
+  <div class="tarjeta">
+    <h3>Cargar una compra <span class="menu">Menú Compras · Lorenzo y Thiago</span></h3>
+    <ol class="pasos">
+      <li>Elegí el <b>proveedor</b> y la <b>fecha</b>. Si el proveedor no está, tocá <span class="btn">Nuevo</span>.</li>
+      <li>Por cada producto: la <b>cantidad</b> en packs, cajas o cajones, el <b>costo por unidad</b> (botella o lata) y el <b>vencimiento</b> si lo tiene. El sistema calcula el costo del bulto y el subtotal.</li>
+      <li>Tocá <span class="btn">Agregar</span> en cada renglón y al terminar <span class="btn pri">Ingresar stock</span>.</li>
+    </ol>
+  </div>
+
+  <div class="dos fila">
+    <div class="tarjeta gris">
+      <h3>Qué pasa al ingresar</h3>
+      <ul>
+        <li>El <b>stock sube</b> en ese momento.</li>
+        <li>El <b>costo</b> del producto pasa a ser el de esta compra.</li>
+        <li>Si el precio va con %, se <b>recalcula solo</b>.</li>
+        <li>Cada ingreso queda como un <b>lote</b> con su vencimiento. Al vender sale primero lo que vence antes.</li>
+      </ul>
+    </div>
+    <div class="tarjeta">
+      <h3>Si una compra salió mal</h3>
+      <p>Una compra no se borra. Si la cantidad estaba mal, se corrige con un <b>ajuste de stock</b> en Productos. Si el costo estaba mal, se corrige el costo del producto en la tabla.</p>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <h3>Gastos del negocio <span class="menu">Menú Gastos · Lorenzo y Thiago</span></h3>
+    <p>Cada gasto se carga con <b>fecha, monto, categoría, medio de pago, a quién se le pagó</b> y un detalle. Todo gasto entra en el balance de Informes.</p>
+    <p>Vienen seis categorías: <span class="campo">Combustible</span> <span class="campo">Sueldos</span> <span class="campo">Alquiler</span> <span class="campo">Servicios</span> <span class="campo">Mantenimiento</span> <span class="campo">Otros</span>. Con el botón <span class="btn">Categorías</span> se agregan otras o se desactivan las que no se usan.</p>
+    <p>Un gasto no se edita: si está mal, se <b>anula con un motivo</b> y se carga de nuevo. El anulado deja de contar en el balance.</p>
+  </div>
+
+  <div class="consejo"><b>Sueldos y adelantos.</b> Se cargan como un gasto más, con la categoría Sueldos y el nombre de la persona en “a quién se le pagó”.</div>
+
+  <div class="pie"><div class="marca">Desarrollado por <b>NEXUSS</b> Agencia Digital · nexuss.com.ar</div><div class="num">6</div></div>
+</section>
+
+<!-- ===================== 7 · INFORMES Y ADMINISTRACIÓN ===================== -->
+<section class="hoja">
+  <div class="cabecera"><img src="logo.webp" alt=""><div class="doc"><b>Manual de uso</b>Sistema de gestión</div><div class="seccion">Informes y administración</div></div>
+
+  <h2>Informes y administración</h2>
+  <div class="bajada">Todo lo de esta página lo ve y lo usa solo Lorenzo.</div>
+
+  <div class="tarjeta">
+    <h3>Informes <span class="menu">Menú Informes</span></h3>
+    <p>El <b>balance</b> del período elegido: ventas, costo de lo vendido, ganancia bruta, gastos y resultado. Atajos para
+      <span class="campo">Hoy</span> <span class="campo">7 días</span> <span class="campo">Este mes</span> <span class="campo">Mes anterior</span> <span class="campo">30 días</span> <span class="campo">Este año</span>,
+      o un rango de fechas a mano. Se ve por día o por mes. Las ventas y los gastos anulados no cuentan.</p>
+  </div>
+
+  <div class="dos fila">
+    <div class="tarjeta">
+      <h3>Usuarios</h3>
+      <p>Cambiar el rol de una persona o <b>desactivar su acceso</b> si deja de trabajar. Abajo, <b>Últimos movimientos</b>: quién hizo qué y cuándo.</p>
+      <p class="chico">Los usuarios nuevos y las contraseñas nuevas los da NEXUSS.</p>
+    </div>
+    <div class="tarjeta">
+      <h3>Configuración</h3>
+      <ul>
+        <li>Datos del comprobante y si se muestran junto al logo.</li>
+        <li>Vencimiento de la cuenta corriente (7 días) y aviso previo (1 día).</li>
+        <li>Aviso de productos por vencer (15 días).</li>
+        <li>Redondeo del precio calculado ($10).</li>
+        <li>Texto del WhatsApp, con <b>{cliente}</b>, <b>{saldo}</b> y <b>{vencimiento}</b>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <h3>Carga inicial desde Excel <span class="menu">Menú Importar datos</span></h3>
+    <ol class="pasos">
+      <li>Tocá <span class="btn">Descargar la plantilla</span>. Tiene tres hojas: <b>Productos</b>, <b>Clientes</b> y <b>Proveedores</b>, con filas de ejemplo que se borran o se pisan.</li>
+      <li>Completala <b>sin cambiar los títulos</b> de las columnas. Precios y costos en pesos, sin centavos. Unidad de venta: pack, caja o cajon. Stock en bultos. En Clientes: <b>saldo que debe</b> y <b>debe desde</b> (día/mes/año).</li>
+      <li>Elegí el archivo. El sistema muestra una vista previa y marca las filas con errores: corregilas en el Excel y volvé a elegirlo.</li>
+      <li>Tocá <span class="btn pri">Importar</span>. Al final dice cuántos se crearon, cuántos se actualizaron y si alguno falló.</li>
+    </ol>
+    <div class="nota"><b>Se puede importar de nuevo</b> la misma planilla corregida: lo que ya existe se actualiza y no se duplica. El stock y el saldo inicial se cargan una sola vez.</div>
+  </div>
+
+  <div class="pie"><div class="marca">Desarrollado por <b>NEXUSS</b> Agencia Digital · nexuss.com.ar</div><div class="num">7</div></div>
+</section>
+
+<!-- ===================== 8 · PREGUNTAS FRECUENTES ===================== -->
+<section class="hoja par">
+  <div class="cabecera"><img src="logo.webp" alt=""><div class="doc"><b>Manual de uso</b>Sistema de gestión</div><div class="seccion">Preguntas frecuentes</div></div>
+
+  <h2>Preguntas frecuentes</h2>
+  <div class="bajada">Las dudas de todos los días, con la respuesta corta.</div>
+
+  <div class="dos">
+    <div>
+      <div class="faq"><b>Vendí mal, ¿qué hago?</b>Anulá la venta con el motivo y hacela de nuevo. El stock y la cuenta del cliente se acomodan solos.</div>
+      <div class="faq"><b>El cliente devolvió una parte.</b>Anulá la venta completa y volvé a cargarla solo con lo que se llevó.</div>
+      <div class="faq"><b>Cargué una compra con el costo equivocado.</b>Corregí el costo en la tabla de Productos. Si la cantidad estaba mal, hacé un ajuste de stock.</div>
+      <div class="faq"><b>Se rompió o se venció mercadería.</b>En Productos, botón Stock, “Sale stock”, con el motivo rotura o vencido.</div>
+      <div class="faq"><b>El precio me dio raro.</b>Revisá el costo y el % de ganancia. El precio se redondea a $10 para arriba. Si querés un precio exacto, escribilo en la columna Precio.</div>
+    </div>
+    <div>
+      <div class="faq"><b>Un cliente pagó una parte por transferencia.</b>En Cuentas corrientes, Registrar pago, con el importe, “Transferencia” y una nota.</div>
+      <div class="faq"><b>El botón de WhatsApp no abre el chat.</b>Revisá que el teléfono del cliente tenga el código de área, sin el 0 ni el 15.</div>
+      <div class="faq"><b>Un producto se vende solo en verano.</b>Tocá el ojo en su fila para desactivarlo. En temporada se vuelve a activar desde el filtro Desactivados.</div>
+      <div class="faq"><b>¿Se pierde algo si se corta internet?</b>No. Lo confirmado ya está guardado en el servidor. Lo que no se llegó a confirmar, hay que volver a cargarlo.</div>
+      <div class="faq"><b>¿Quién hizo tal cosa?</b>Lorenzo lo ve en Usuarios, Últimos movimientos. Los movimientos de stock y de cuenta corriente también muestran el usuario.</div>
+    </div>
+  </div>
+
+  <div class="soporte abajo">
+    <div style="flex:1">
+      <h3>¿Algo no funciona como dice acá?</h3>
+      <p>Escribile a NEXUSS contando qué pantalla estabas usando, qué tocaste y qué apareció. Si podés, mandá una foto o captura de la pantalla.</p>
+      <p>Las mejoras y los cambios del sistema se coordinan con Lorenzo.</p>
+    </div>
+    <div style="text-align:right"><div class="nx">NEXUSS<i>.</i></div><div style="font-size:8.6pt;opacity:.85">Agencia Digital<br>nexuss.com.ar</div></div>
+  </div>
+
+  <div class="pie"><div class="marca">Desarrollado por <b>NEXUSS</b> Agencia Digital · nexuss.com.ar</div><div class="num">8</div></div>
+</section>
+
+</body>
+</html>
