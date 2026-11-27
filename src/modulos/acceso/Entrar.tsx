@@ -72,7 +72,7 @@ export function Entrar() {
               <Boton type="submit" variante="primario" cargando={enviando} className="mt-1 w-full py-2.5">
                 Entrar
               </Boton>
-              <p className="text-center text-[12px] text-mudo">¿Te olvidaste la contraseña? Pedile a Lorenzo que te la cambie.</p>
+              <p className="text-center text-[12px] text-mudo">¿Te olvidaste la contraseña? Avisale a Lorenzo: él le pide una nueva a NEXUSS.</p>
             </form>
           )}
         </div>
