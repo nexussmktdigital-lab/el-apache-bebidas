@@ -50,7 +50,7 @@ export async function setup() {
 
     // Usuarios de prueba. El trigger on_auth_user_created crea los perfiles.
     await c.query(
-      `insert into auth.users (id, email, raw_user_meta_data) values
+      `insert into auth.users (id, email, raw_app_meta_data) values
         ($1, 'lorenzo@pruebas.local', '{"nombre":"Lorenzo","rol":"superusuario"}'),
         ($2, 'lorena@pruebas.local',  '{"nombre":"Lorena","rol":"administracion"}'),
         ($3, 'thiago@pruebas.local',  '{"nombre":"Thiago","rol":"reparto"}'),

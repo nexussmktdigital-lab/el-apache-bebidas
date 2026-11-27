@@ -56,7 +56,9 @@ for (const u of usuarios) {
     email: u.email,
     password: clave,
     email_confirm: true,
-    user_metadata: { nombre: u.nombre, rol: u.rol },
+    // El rol va en app_metadata: solo lo puede escribir el servidor (ver migración alta_solo_por_admin).
+    app_metadata: { nombre: u.nombre, rol: u.rol },
+    user_metadata: { nombre: u.nombre },
   })
   if (error) {
     console.error(`✗ ${u.email}: ${error.message}`)

@@ -14,11 +14,37 @@ describe('perfiles y roles', () => {
     })
   })
 
-  it('un usuario sin rol válido en los metadatos queda como reparto', async () => {
+  it('quien se registra solo y se pone superusuario en sus datos queda desactivado', async () => {
     await como('servidor', async (c) => {
-      await c.query(`insert into auth.users (email, raw_user_meta_data) values ('x@pruebas.local', '{"rol":"gerente"}')`)
-      const r = await c.query(`select rol::text, nombre from public.perfiles where nombre = 'x'`)
-      expect(r.rows[0]).toEqual({ rol: 'reparto', nombre: 'x' })
+      const r = await c.query(
+        `insert into auth.users (email, raw_user_meta_data) values ('intruso@pruebas.local', '{"nombre":"Intruso","rol":"superusuario"}') returning id`,
+      )
+      const p = await c.query(`select nombre, rol::text, activo from public.perfiles where id = $1`, [r.rows[0].id])
+      expect(p.rows[0]).toEqual({ nombre: 'Intruso', rol: 'reparto', activo: false })
+    })
+  })
+
+  it('un alta del servidor con un rol inválido también queda desactivada', async () => {
+    await como('servidor', async (c) => {
+      await c.query(`insert into auth.users (email, raw_app_meta_data) values ('x@pruebas.local', '{"rol":"gerente"}')`)
+      const r = await c.query(`select rol::text, nombre, activo from public.perfiles where nombre = 'x'`)
+      expect(r.rows[0]).toEqual({ rol: 'reparto', nombre: 'x', activo: false })
+    })
+  })
+
+  it('el usuario desactivado no puede hacer nada', async () => {
+    await como('servidor', async (c) => {
+      const r = await c.query(`insert into auth.users (email, raw_user_meta_data) values ('otro@pruebas.local', '{"rol":"superusuario"}') returning id`)
+      const claims = JSON.stringify({ sub: r.rows[0].id, role: 'authenticated' })
+      await c.query(`select set_config('request.jwt.claims', $1, true)`, [claims])
+      await c.query('set local role authenticated')
+      const q = await c.query(
+        `select public.auth_rol()::text as rol, public.ve_costos() as costos,
+                (select count(*)::int from public.configuracion) as config,
+                (select count(*)::int from public.v_productos) as productos`,
+      )
+      expect(q.rows[0]).toEqual({ rol: null, costos: false, config: 0, productos: 0 })
+      await debeFallar(c, 'permiso', `select public.registrar_pago(gen_random_uuid(), 1000, 'efectivo', null)`)
     })
   })
 
