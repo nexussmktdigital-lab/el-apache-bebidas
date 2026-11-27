@@ -45,19 +45,21 @@ Aplicar las migraciones pendientes al proyecto asociado:
 npm run db:push
 ```
 
-Aplicar migraciones y además los datos de ejemplo de `supabase/seed.sql` (solo desarrollo):
-
-```bash
-npm run db:seed
-```
-
 Regenerar los tipos TypeScript desde la base (`src/tipos/supabase.gen.ts`, no se edita a mano):
 
 ```bash
 npm run db:types
 ```
 
-Hay dos proyectos: desarrollo (con datos de ejemplo) y producción. Producción solo se toca con autorización expresa.
+**El proyecto asociado (`pkkasaypdkjwmsaylido`) es PRODUCCIÓN desde el 27/11/2026**: tiene los datos reales de El Apache. Se vació y quedó sin datos de ejemplo. Cualquier cambio en la base se aplica solo con autorización expresa, después de pasar las pruebas automáticas y con una copia de seguridad previa. No hay proyecto de desarrollo en línea: las pruebas de base corren en el Postgres embebido. `supabase/seed.sql` y `scripts/cargar-stock-ejemplo.mjs` son solo para un proyecto de pruebas nuevo; el script se niega a correr contra producción.
+
+### Copias de seguridad
+
+```bash
+node scripts/respaldar.mjs pkkasaypdkjwmsaylido
+```
+
+Guarda todas las tablas y la lista de usuarios (sin contraseñas) en `respaldos/apache-AAAAMMDD-HHMM.json`, fuera del repositorio. No necesita Docker.
 
 ## Pruebas
 

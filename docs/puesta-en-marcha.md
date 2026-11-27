@@ -1,49 +1,20 @@
 # Puesta en marcha en producción
 
-Pasos para pasar del proyecto de desarrollo al de producción antes del 1 de diciembre de 2026. Los hace NEXUSS; los marcados con **(Lorenzo)** necesitan datos del cliente.
+Pasos para dejar el sistema en producción antes del 1 de diciembre de 2026. Los hace NEXUSS; los marcados con **(Lorenzo)** necesitan datos del cliente.
 
-## 1. Proyecto de producción en Supabase
+## 1 a 3. Base, usuarios y dirección pública · HECHO el 27/11/2026
 
-1. Crear un proyecto nuevo en Supabase, organización "sistemas", nombre **El Apache Bebidas · Producción**, región São Paulo. Guardar la contraseña de la base en un lugar seguro (no en el repo).
-2. En Authentication: desactivar "Allow new users to sign up" y "Confirm email". En URL Configuration, Site URL = la dirección pública del sistema.
-3. Asociar y aplicar las migraciones (las mismas que en desarrollo, sin seed):
+Por decisión de NEXUSS se usó el proyecto que ya existía (`pkkasaypdkjwmsaylido`) como producción, en lugar de crear uno nuevo:
 
-```bash
-npx supabase link --project-ref <ref-produccion>
-```
+1. Copia de los datos de prueba en `respaldos/` (por las dudas).
+2. `npx supabase db reset --linked --no-seed`: la base quedó vacía, con las migraciones aplicadas, la configuración por defecto (7 días, aviso 1 día, vencimientos 15 días, redondeo $10) y las seis categorías de gastos. La numeración de comprobantes arranca en 000001.
+3. Se borraron los usuarios de prueba y se crearon los reales con `scripts/crear-usuarios.mjs` y `scripts/usuarios-produccion.local.json`: Lorenzo superusuario, Thiago administración, Patricia ventas y cobros. Las claves están en `supabase/usuarios-produccion.local.txt` (fuera del repo). Entregarlas por un canal privado, no por el grupo.
+4. Migración `alta_solo_por_admin`: el rol de un usuario nuevo solo lo puede poner el servidor. Una cuenta creada por otro camino queda desactivada.
+5. La dirección pública no cambió: ya apuntaba a este proyecto.
 
-```bash
-npx supabase db push --linked
-```
+**Pendiente en el panel de Supabase**: Authentication > Sign In / Providers > desactivar "Allow new users to sign up". La base ya está protegida (una cuenta registrada sola queda desactivada), pero conviene cerrar también la puerta.
 
-4. Verificar en Table Editor que existen `perfiles`, `productos`, `ventas`, etc., y que `configuracion` tiene una fila.
-
-> Para volver a trabajar contra desarrollo: `npx supabase link --project-ref pkkasaypdkjwmsaylido`. El `link` es por máquina; conviene dejar asociado desarrollo y asociar producción solo cuando haya que migrar.
-
-## 2. Usuarios reales
-
-Los emails y roles están en `scripts/usuarios-produccion.local.json` (archivo local, fuera del repo):
-
-- Lorenzo · superusuario
-- Thiago · administración
-- Patricia · ventas y cobros
-
-```bash
-node scripts/crear-usuarios.mjs <ref-produccion> scripts/usuarios-produccion.local.json supabase/usuarios-produccion.local.txt
-```
-
-Las contraseñas generadas quedan en `supabase/usuarios-produccion.local.txt`. Entregarlas a cada persona por un canal privado (no por el grupo de WhatsApp) y recomendar que las guarden en el celular.
-
-## 3. Cloudflare apuntando a producción
-
-En el Worker `el-apache-bebidas`, Configuración > Compilación > Variables de compilación, reemplazar:
-
-- `VITE_SUPABASE_URL` → la URL del proyecto de producción
-- `VITE_SUPABASE_ANON_KEY` → la clave publicable (`sb_publishable_…`) del proyecto de producción
-
-Hacer "Reintentar implementación" (o un push). Desde ese momento la dirección pública trabaja contra producción.
-
-Si se quiere conservar un ambiente de pruebas en línea, crear un segundo Worker (`el-apache-bebidas-pruebas`) con las variables de desarrollo.
+**Desde ahora no hay base de desarrollo en línea.** Los cambios se prueban con las pruebas automáticas (Postgres embebido), se hace una copia antes y se aplican con `npm run db:push`. Si más adelante hace falta probar contra Supabase, crear un proyecto de pruebas aparte y cargarle `supabase/seed.sql`.
 
 ## 4. Configuración inicial **(Lorenzo)**
 
@@ -72,10 +43,10 @@ Reemplazar `src/recursos/logo.webp` y `referencia/logo.webp` por el logo origina
 
 ## 8. Copias de seguridad
 
-Supabase hace copias diarias automáticas en el plan Pro. En el plan gratuito no hay copias automáticas: hasta que se contrate, correr una vez por semana desde esta máquina:
+Supabase hace copias diarias automáticas en el plan Pro. En el plan gratuito no hay copias automáticas: hasta que se contrate, correr una vez por semana desde esta máquina (no necesita Docker):
 
 ```bash
-npx supabase db dump --linked -f respaldos/apache-$(date +%Y%m%d).sql --data-only
+node scripts/respaldar.mjs pkkasaypdkjwmsaylido
 ```
 
-(La carpeta `respaldos/` queda fuera del repo.)
+Guarda todas las tablas y la lista de usuarios (sin contraseñas) en `respaldos/apache-AAAAMMDD-HHMM.json`. La carpeta `respaldos/` queda fuera del repo; conviene copiarla también a un disco o a la nube.

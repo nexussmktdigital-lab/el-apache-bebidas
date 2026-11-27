@@ -12,8 +12,7 @@
     "test:ui": "vitest run --project ui",
     "test:db": "vitest run --project db",
     "db:push": "supabase db push --linked",
-    "db:types": "supabase gen types typescript --linked --schema public > src/tipos/supabase.gen.ts",
-    "db:seed": "supabase db push --linked --include-seed"
+    "db:types": "supabase gen types typescript --linked --schema public > src/tipos/supabase.gen.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",

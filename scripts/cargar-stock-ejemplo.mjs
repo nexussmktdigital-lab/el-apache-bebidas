@@ -18,6 +18,13 @@ const env = Object.fromEntries(
     .filter((l) => l.includes('='))
     .map((l) => l.split('=').map((s) => s.trim())),
 )
+// El proyecto pkkasaypdkjwmsaylido pasó a ser PRODUCCIÓN el 27/11/2026: nunca cargar datos de ejemplo ahí.
+const PRODUCCION = ['pkkasaypdkjwmsaylido']
+if (PRODUCCION.some((ref) => (env.VITE_SUPABASE_URL ?? '').includes(ref))) {
+  console.error('El .env apunta a PRODUCCIÓN. Este script es solo para un proyecto de pruebas.')
+  process.exit(1)
+}
+
 const credenciales = readFileSync('supabase/usuarios.local.txt', 'utf8')
 const bloque = credenciales.split(/\n(?=\S)/).find((b) => b.includes(`email: ${email}`))
 const clave = bloque?.match(/clave: (\S+)/)?.[1]
